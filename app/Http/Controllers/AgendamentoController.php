@@ -20,7 +20,7 @@ class AgendamentoController extends Controller
         $agendamentos = Agendamento::with('procedimento', 'cliente')->get();
 
         $agendamentos->map(function ($agendamento) {
-            $agendamento->data = date('d/m/Y', strtotime($agendamento->data));            
+            $agendamento->data = date('d/m/Y', strtotime($agendamento->data));  
             return $agendamento;
         });
 

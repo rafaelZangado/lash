@@ -4,7 +4,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-
+ 
+    
+ 
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
@@ -47,27 +49,35 @@
                   <tr>
                     <!-- Example single danger button -->                    
                       <th> Cliente </th>
-                      {{-- <th>Procedimento </th> --}}
                       <th>Horario</th>
                       <th>Data</th>
-                      {{-- <th>R$ valor </th> --}}
                       <th>status</th>
                       <th><i class="mdi ti-phone"></i>  WhastApp</th>
-                      {{-- <th><i class="ti-instagram"></i> Instagram</th>   --}}
                       <th>Ação</th>                  
                   </tr>
               </thead>
               <tbody>
                 @foreach ($agendamentos as $agendamento)                  
                   <tr>
-                    <td>{{$agendamento->cliente->nome}} </td>
-                    {{-- <td>{{$agendamento->procedimento->nome}} </td> --}}
+                    <td data-bs-toggle="collapse" 
+                        data-bs-target="#{{$agendamento->id}}" 
+                        aria-expanded="false" 
+                        aria-controls="flush-collapseOne"><a href="#">
+                      {{$agendamento->cliente->nome}} 
+                      </a>
+                      <div id="{{$agendamento->id}}" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                        <hr>
+                            <b>Procedimento: </b> {{$agendamento->procedimento->nome}}</br>
+                            <b>Valor: R$ </b> {{$agendamento->procedimento->preco}}</br>
+                            <b>Instagram: </b> {{$agendamento->cliente->instagram}}</br>
+                        </div>
+                      </div>
+                    </td>
+                    
                     <td>{{ $agendamento->opening_hours }}</td>                            
                     <td>{{ $agendamento->data }}</td>                            
-                    <td>R$ {{$agendamento->procedimento->preco}} </td>
-                    <td>{{ !$agendamento->return_date ? 'Primeira viagem' : 'Retorno' }}</td>
-
-                    
+                    <td>{{ !$agendamento->return_date ? 'Primeira viagem' : 'Retorno' }}</td>                 
                     <td>
                       <a href="#">{{$agendamento->cliente->whastapp}} 
                       </a>
@@ -115,6 +125,9 @@
     </div>
 </div>
 
+    
+  
+</div>
 
 <!--CRIAR AGENDAMENTO-->
 <div class="modal fade col-lg-12" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

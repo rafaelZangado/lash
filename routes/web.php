@@ -20,27 +20,27 @@ use Illuminate\Support\Facades\Route;
 
 
 //Rota Dashboard
-Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('/teste', [DashboardController::class, 'teste'])->name('teste');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/teste', [DashboardController::class, 'teste'])->name('teste');
 
 //Rota clientes
-Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes');
-Route::post('/clientes', [ClienteController::class, 'store'])->name('salvar');
+    Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes');
+    Route::post('/clientes', [ClienteController::class, 'store'])->name('salvar');
 
 //Rota Procedimentos
-Route::get('/procedimento', [ProcedimentoController::class, 'index'])->name('procedimento');
-Route::post('/procedimentoSave', [ProcedimentoController::class, 'store'])->name('procedimentoSave');
-Route::post('/procedimentoEdite', [ProcedimentoController::class, 'up'])->name('procedimentoEdite');
-Route::post('/procedimentoDelet', [ProcedimentoController::class, 'delet'])->name('procedimentoDelet');
+    Route::get('/procedimento', [ProcedimentoController::class, 'index'])->name('procedimento');
+    Route::post('/procedimentoSave', [ProcedimentoController::class, 'store'])->name('procedimentoSave');
+    Route::post('/procedimentoEdite', [ProcedimentoController::class, 'up'])->name('procedimentoEdite');
+    Route::post('/procedimentoDelet', [ProcedimentoController::class, 'delet'])->name('procedimentoDelet');
 
 //Agendamento
-Route::get('/agendamento', [AgendamentoController::class, 'index'])->name('agendamento');
-Route::post('/agendamento/store', [AgendamentoController::class, 'store'])->name('agendamento-store');
-Route::put('/agendamento/{id}', [AgendamentoController::class, 'update'])->name('agendamento-update');
-Route::put('/agendamento/{id}/start', [AgendamentoController::class, 'start'])->name('agendamento-start');
-Route::get('/agendamentos/filtrar', [AgendamentoController::class, 'filtrar'])->name('agendamentos-filtrar');
-Route::put('/agendamento/{id}/close', [AgendamentoController::class, 'close'])->name('agendamento-close');
-Route::delete('/agendamento/{id}', [AgendamentoController::class, 'delete'])->name('delete');
+    Route::get('/agendamento', [AgendamentoController::class, 'index'])->name('agendamento');
+    Route::post('/agendamento/store', [AgendamentoController::class, 'store'])->name('agendamento-store');
+    Route::put('/agendamento/{id}', [AgendamentoController::class, 'update'])->name('agendamento-update');
+    Route::put('/agendamento/{id}/start', [AgendamentoController::class, 'start'])->name('agendamento-start');
+    Route::get('/agendamentos/filtrar', [AgendamentoController::class, 'filtrar'])->name('agendamentos-filtrar');
+    Route::put('/agendamento/{id}/close', [AgendamentoController::class, 'close'])->name('agendamento-close');
+    Route::delete('/agendamento/{id}', [AgendamentoController::class, 'delete'])->name('delete');
 
 //Atendimento
-Route::get('/atendimento', [AtendimentoController::class, 'index'])->name('atendimento');
+    Route::get('/atendimento', [AtendimentoController::class, 'index'])->name('atendimento');
