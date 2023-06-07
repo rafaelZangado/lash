@@ -131,46 +131,49 @@
 
 <!--CRIAR AGENDAMENTO-->
 <div class="modal fade col-lg-12" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog  modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="card-title">Criar novo agendamento.</h4>
             </div>
             <form class="forms-sample" method="POST" action="{{ route('agendamento-store') }}" id="agendamento-form">
                 <div class="modal-body">
-                  @csrf                  
+                  @csrf      
+
                   <div class="row form-group">
                     <div class="col">
                       <input class="form-control" placeholder="dd/mm/yyyy" type="date" name="date" id="date-input" min="2023-05-28">
                     </div>                  
                     <div class="col">
-                      <input class="form-control" type="time" id="appt" name="opening_hours" min="09:00" max="18:00" required>
+                      <input class="form-control" type="time" id="appt" name="opening_hours"  required>
                     </div>
                   </div>
 
-                  <div class="form-group">
-                    <input class="form-control" type="text" name="whastapp" placeholder="(99) 9 9999-9999">
-                  </div>
+                  <div class="row form-group">
+                    <div class="col">
+                      <input class="form-control" placeholder="999.999.999-99" type="text" name="cpf" id="date-input">
+                    </div>                  
+                    <div class="col">
+                      <input class="form-control" placeholder="Nome" type="text" id="appt" name="nome"  required>
+                    </div>
+                    <div class="col">
+                      <input class="form-control"  placeholder="whatsapp" type="text" id="appt" name="whatsapp"  required>
+                    </div>
+                  </div>                
 
-                  <div class="form-group">
-                    <select id="mySelect" name="cliente_id" class="form-control">
-                      @foreach ($clientes as $cliente)
-                        <option value="{{ $cliente->id }}">
-                          {{ $cliente->nome }}
-                        </option>
-                      @endforeach
-                    </select>
-                  </div>
-
-                  <div class="form-group" >
-                    <select id="multiple" name="procedimento_id" multiple>
+                  <div class="container text-center">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
                       @foreach ($procedimentos as $procedimento)
-                        <option value="{{ $procedimento->id }}">
-                            {{ $procedimento->nome }}
-                        </option>
+                        <div class="col">
+                          
+                          <input class="form-check-input" type="checkbox"  name="procedimento_key[]" value="{{$procedimento->id}}" role="switch" id="flexSwitchCheckChecked" > 
+                          {{ $procedimento->nome }}
+                         
+                        </div>                     
                       @endforeach
-                    </select>
-                  </div>
+                    </div>
+                  </div> 
+
                 </div>                
 
                 <div class="modal-footer">
@@ -183,47 +186,52 @@
 </div>
 
 <!--REMANEJAR ATENDIMENTO-->
-  @foreach ($agendamentos as $agendamento)
+@foreach ($agendamentos as $agendamento)
     <!-- Modal -->
-    <div class="modal fade" id="editModal{{ $agendamento->id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="card-title">Iniciar Atendimento | {{$agendamento->cliente->nome}} </h4>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="{{ route('agendamento-update', $agendamento->id) }}">
-                  @csrf
-                  @method('PUT')
-                  
-                  <!-- Adicione os campos do formulário que deseja editar -->                       
-                  
-                  <div class="form-group">
-                    <input class="form-control" placeholder="dd/mm/yyyy" type="date" name="data" value="{{ $agendamento->data }}" id="date-input" min="2023-05-28">
-                  </div>
+  <div class="modal fade" id="editModal{{ $agendamento->id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="card-title">Iniciar Atendimento | {{$agendamento->cliente->nome}} </h4>
+          </div>
+          <div class="modal-body">
+            <form method="POST" action="{{ route('agendamento-update', $agendamento->id) }}">
+                @csrf
+                @method('PUT')
 
-                  <div class="form-group">
-                    <input class="form-control" type="time" id="appt"  value="{{$agendamento->opening_hours }}" name="opening_hours" min="09:00" max="18:00" required>
-                  </div>
+                <!-- Adicione os campos do formulário que deseja editar -->
 
-                  <div class="container text-center">
-                    <div class="row row-cols-3">
-                      <!--Ativos-->
-                      <div class="col">
-                        <div class="form-check form-switch">
-                          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
-                            {{$agendamento->procedimento->nome}}                          
-                        </div>                    
-                      </div>
-                    </div>   
-                  </div>                           
-                  <button type="submit" class="btn btn-success btn-rounded btn-fw">Salvar</button>
-                </form>
-            </div>
+                <div class="form-group">
+                    <input class="form-control" placeholder="dd/mm/yyyy" type="date" name="data" 
+                        value="{{ $agendamento->data }}" id="date-input" min="2023-05-28">
+                </div>
+
+                <div class="form-group">
+                  <input class="form-control" type="time" id="appt"  
+                    value="{{$agendamento->opening_hours }}" name="opening_hours" min="09:00" max="18:00" required>
+                </div>
+
+                <div class="container text-center">
+                  <div class="row row-cols-3">
+                      <!-- Ativos -->
+                      @foreach ($procedimentosPorId[$agendamento->id] as $nomeProcedimento)
+                        <div class="col">
+                          <div class="form-check form-switch">
+                            <p>{{ $nomeProcedimento }}</p> 
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>                           
+                          </div>                    
+                        </div>
+                      @endforeach
+                  </div>   
+                </div>                           
+                <button type="submit" class="btn btn-success btn-rounded btn-fw">Salvar</button>
+            </form>
           </div>
       </div>
     </div>
-  @endforeach
+  </div>
+@endforeach
+
 
 
 <!--INICIAR ATENDIMENTO-->
@@ -233,8 +241,8 @@
       <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-                <h4 class="card-title">Iniciar Agendamento | {{$agendamento->cliente->nome}} </h4>
-                <h5>R$: {{$agendamento->procedimento->preco}}</h5>
+              <h4 class="card-title">Iniciar Agendamento | {{$agendamento->cliente->nome}} </h4>
+              <h5>R$: {{$agendamento->procedimento->preco}}</h5>
             </div>
             <div class="modal-body">
                 <form method="POST" action="{{ route('agendamento-start', $agendamento->id) }}">
@@ -259,11 +267,15 @@
                       <b>Procedimentos: </b>
                       <div class="container text-center">
                         <div class="row row-cols-3">                      
-                          <div class="col">
-                            <div class="form-check form-switch">
-                                {{$agendamento->procedimento->nome}}                          
-                            </div>                    
-                          </div>
+                                                
+                            @foreach ($procedimentosPorId[$agendamento->id] as $nomeProcedimento)
+                              <div class="col">
+                                <div class="form-check form-switch">
+                                  <p>{{ $nomeProcedimento }}</p>                                                               
+                                </div>                    
+                              </div>
+                            @endforeach                                      
+                         
                         </div>   
                       </div>
                     </div>
@@ -357,11 +369,14 @@
                 <p>Deseja realmente excluir este agendamento?</p>
             </div>
             <div class="modal-footer">
+              @foreach ($agendamentos as $agendamento)    
                 <form id="deleteForm" method="POST" action="{{ route('delete', ['id' => $agendamento->id]) }}">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Excluir</button>
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit" class="btn btn-danger">Excluir</button>
                 </form>
+              @endforeach
+
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>

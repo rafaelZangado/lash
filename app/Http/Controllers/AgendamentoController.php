@@ -12,51 +12,98 @@ use Illuminate\Support\Facades\Http;
 
 class AgendamentoController extends Controller
 {
+    protected $table_agendamento;
+
+    public function __construct(Agendamento $table_agendamento)
+    {
+        $this->table_agendamento = $table_agendamento;
+    }
+
     public function index()
     {
         $procedimentos = Procedimento::all();
+        $procedimentos2 = Procedimento::all();
         $clientes = Cliente::all();
 
         $agendamentos = Agendamento::with('procedimento', 'cliente')->get();
 
+        $id = Agendamento::pluck('procedimento_key', 'id')->all();
+       
+        
+        $procedimentosPorId = [];
+        
+        foreach ($id as $agendamentoId => $procedimentoKey) {
+            $procedimentoIds = explode(',', $procedimentoKey);
+            $nomesProcedimentos = $procedimentos->whereIn('id', $procedimentoIds)->pluck('nome')->all();
+            $procedimentosPorId[$agendamentoId] = $nomesProcedimentos;
+        }
+               
+
         $agendamentos->map(function ($agendamento) {
             $agendamento->data = date('d/m/Y', strtotime($agendamento->data));  
+            
             return $agendamento;
         });
 
 
         return view('agendamento', [
             'procedimentos' => $procedimentos,
+            'procedimentos' => $procedimentos2,
             'clientes' => $clientes,
-            'agendamentos' => $agendamentos
+            'agendamentos' => $agendamentos,
+            'procedimentosPorId' => $procedimentosPorId,
+          
         ]);
     }
 
     public function store(Request $request)
-    {
-
+    {      
         $dados = $request->validate([
-            'procedimento_id' => 'required|array|exists:procedimentos,id',            
-            'cliente_id' => 'required',
             'date' => 'required|date',
-            'whastapp' => 'required|numeric',
             'opening_hours' => 'required',
-           
+            'cpf' => 'required',
+            'nome' => 'required',
+            'whatsapp' => 'required|numeric',            
+            'processo' => 'required|array',           
         ]);
-       
-        $table = resolve(Agendamento::class);
-       
-        $table->data = $dados['date'];
-        $table->procedimento_id = $dados['procedimento_id'];
-        $table->cliente_id = $dados['cliente_id'];
-        $table->whastapp = $dados['whastapp'];
-        $table->opening_hours = $dados['opening_hours'];
-        $table->status = 0;
-        $table->final_time = null;
-        $table->return_date = null;
-        $table->save();
+              
+        $this->registeragenda($dados );            
         
         return redirect()->route('agendamento')->with('success', 'Agendamento atualizado com sucesso.');
+    }
+    
+    public function registercliantes($dados) 
+    {
+        $table_cliente = resolve(Cliente::class);
+
+        $table_cliente->nome = $dados['nome'];
+        $table_cliente->whastapp = $dados['whatsapp'];
+        $table_cliente->cpf = $dados['cpf'];
+        $table_cliente->email = '';
+        $table_cliente->instagram = '';
+
+        if($table_cliente->save()) {
+            return $id_cliente = $table_cliente->id;           
+        } else {
+            return redirect()->route('agendamento')->with('error', 'Processo não autorizado.');
+        }
+
+    }
+
+    public function registeragenda($dados) 
+    {
+        $table_agendamento = resolve(Agendamento::class);  
+        $id_cliente = $this->registercliantes($dados);       
+        $table_agendamento->data = $dados['date'];
+        $table_agendamento->opening_hours = $dados['opening_hours'];
+        $table_agendamento->procedimento_key = implode(',', $dados['processo']);  
+        $table_agendamento->cliente_id = $id_cliente;       
+        $table_agendamento->procedimento_id = 1;     
+        $table_agendamento->status = 0;
+        $table_agendamento->final_time = null;
+        $table_agendamento->return_date = null;
+        $table_agendamento->whastapp = '';
+        $table_agendamento->save();
     }
 
     public function update(Request $request, $id)
@@ -118,8 +165,13 @@ class AgendamentoController extends Controller
 
     public function delete($id)
     {
-        Agendamento::find($id)->delete();
+        if ($id) {
+            Agendamento::find($id)->delete();
+            return redirect()->back()->with('success', 'Informações registradas com sucesso!');
+        }
+        
         return redirect()->back()->with('success', 'Informações registradas com sucesso!');
+    
     }
 
 

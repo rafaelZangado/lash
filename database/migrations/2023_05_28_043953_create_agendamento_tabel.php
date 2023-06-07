@@ -17,19 +17,24 @@ class CreateAgendamentoTabel extends Migration
             $table->id();
             $table->unsignedBigInteger('cliente_id'); // Coluna para armazenar o ID do cliente
             $table->unsignedBigInteger('procedimento_id'); // Coluna para armazenar o ID do procedimento
+            //$table->unsignedBigInteger('procedimento_key_id')->nullable();
             $table->date('data');
             $table->string('whastapp');
-            $table->timestamps();
+            $table->timestamps();        
+
+            // $table->foreign('procedimento_key_id')
+            //     ->references('id')
+            //     ->on('procedimento_key');
 
             //relacionamento com tabela Procedimentos
             $table->foreign('procedimento_id')
-            ->references('id')
-            ->on('procedimentos');
+                ->references('id')
+                ->on('procedimentos');
             
             //relacionamento com tabela Clientes
             $table->foreign('cliente_id')
-            ->references('id')
-            ->on('clientes'); 
+                ->references('id')
+                ->on('clientes'); 
 
         });
     }
