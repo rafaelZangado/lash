@@ -52,7 +52,6 @@
                       <th>Horario</th>
                       <th>Data</th>
                       <th>status</th>
-                      <th><i class="mdi ti-phone"></i>  WhastApp</th>
                       <th>Ação</th>                  
                   </tr>
               </thead>
@@ -70,6 +69,7 @@
                         <hr>
                             <b>Procedimento: </b> {{$agendamento->procedimento->nome}}</br>
                             <b>Valor: R$ </b> {{$agendamento->procedimento->preco}}</br>
+                            <b>WhastApp  </b> {{$agendamento->cliente->whastapp}}</br>
                             <b>Instagram: </b> {{$agendamento->cliente->instagram}}</br>
                         </div>
                       </div>
@@ -78,13 +78,7 @@
                     <td>{{ $agendamento->opening_hours }}</td>                            
                     <td>{{ $agendamento->data }}</td>                            
                     <td>{{ !$agendamento->return_date ? 'Primeira viagem' : 'Retorno' }}</td>                 
-                    <td>
-                      <a href="#">{{$agendamento->cliente->whastapp}} 
-                      </a>
-                      <a href="#">  |
-                      {{$agendamento->whastapp}}   
-                      </a> 
-                    </td>
+                    
                     <td>
                       @if(!$agendamento->status == 1)
                         {{-- iniciar --}}                     
@@ -188,8 +182,8 @@
 <!--REMANEJAR ATENDIMENTO-->
 @foreach ($agendamentos as $agendamento)
     <!-- Modal -->
-  <div class="modal fade" id="editModal{{ $agendamento->id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+  <div class="modal fade col-lg-12" id="editModal{{ $agendamento->id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg">
       <div class="modal-content">
           <div class="modal-header">
               <h4 class="card-title">Iniciar Atendimento | {{$agendamento->cliente->nome}} </h4>
@@ -237,8 +231,8 @@
 <!--INICIAR ATENDIMENTO-->
   @foreach ($agendamentos as $agendamento)
     <!-- Modal -->
-    <div class="modal fade" id="iniciarModal{{ $agendamento->id }}" tabindex="-1" aria-labelledby="iniciarModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
+    <div class="modal fade col-lg-12" id="iniciarModal{{ $agendamento->id }}" tabindex="-1" aria-labelledby="iniciarModalLabel" aria-hidden="true">
+      <div class="modal-dialog  modal-lg">
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="card-title">Iniciar Agendamento | {{$agendamento->cliente->nome}} </h4>
@@ -358,8 +352,8 @@
 
 
 <!-- Modal de confirmação de exclusão -->
-<div class="modal fade" id="confirmDelete" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade col-lg-12" id="confirmDelete" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog ">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="confirmDeleteLabel">Confirmar Exclusão</h5>
@@ -382,12 +376,50 @@
         </div>
     </div>
 </div>
-
+ <link rel="stylesheet" href="https://bryntum.com/products/calendar/build/calendar.material.css" data-bryntum-theme>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 <script>
+import * as Module from 'https://bryntum.com/products/calendar/build/calendar.module.js';
+Object.assign(window, Module);
+// The code above imports module bundle and places all Bryntum classes on window to simplify coding at CodePen
+
+const calendar = new Calendar({
+    height   : 600,
+    appendTo : document.body,
+
+    date : '2022-01-01T00:00:00',
+
+    // We have a little less width in our context, so reduce the responsive breakpoints
+    responsive : {
+        small : {
+            when : 480
+        },
+        medium : {
+            when : 640
+        }
+    },
+
+    resources : [
+        {
+            id         : 1,
+            name       : 'Default Calendar',
+            eventColor : 'green'
+        }
+    ],
+    events : [
+        {
+            id         : 1,
+            name       : 'Meeting',
+            startDate  : '2022-01-01T10:00:00',
+            endDate    : '2022-01-01T11:00:00',
+            resourceId : 1
+        }
+    ]
+});
+
  // Obtenha o token CSRF do cookie
     {{-- const csrfToken = document.cookie.match(new RegExp('(^| )XSRF-TOKEN=([^;]+)'));
 

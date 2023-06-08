@@ -37,8 +37,21 @@ class AgendamentoController extends Controller
             $nomesProcedimentos = $procedimentos->whereIn('id', $procedimentoIds)->pluck('nome')->all();
             $procedimentosPorId[$agendamentoId] = $nomesProcedimentos;
         }
-               
+         
+        
+        $procedimentoKey = $id[37]; // Exemplo de string de procedimentos
 
+        $procedimentoIds = explode(',', $procedimentoKey); // Divide a string em um array de IDs
+
+        $resultados = Procedimento::whereIn('id', $procedimentoIds)->get(); // Busca os procedimentos pelo array de IDs
+       
+        // Agora você pode acessar os resultados para cada procedimento
+        foreach ($resultados as $procedimento) {
+          // echo $procedimento->nome;
+        }
+
+        
+       // dd($procedimento->nome);
         $agendamentos->map(function ($agendamento) {
             $agendamento->data = date('d/m/Y', strtotime($agendamento->data));  
             

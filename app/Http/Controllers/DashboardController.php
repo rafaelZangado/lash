@@ -8,6 +8,27 @@ use Illuminate\Support\Facades\Http;
 
 class DashboardController extends Controller
 {
+    
+    public function eventos()
+    {
+       
+        $agendamentos = Agendamento::all();
+
+        $eventos = [];
+        foreach ($agendamentos as $agendamento) {
+            $evento = [
+                "title" => $agendamento->nome,
+                "start" => $agendamento->data,
+            ];
+            $eventos[] = $evento;
+        }
+                
+       // return $agendamento;
+        return response()->json($eventos);
+
+           
+    }
+
     public function index(){
         $agendamento = Agendamento::all();
 
@@ -20,8 +41,14 @@ class DashboardController extends Controller
     }
 
     public function teste(){
-     
-           
-        return view('/elementoTeste');
+
+        $agendamento = Agendamento::all();
+        $agendamento =  json_encode($agendamento);
+        
+        return view('/elementoTeste', [
+           'agendamento' => $agendamento
+        ]);
     }
+
+
 }
