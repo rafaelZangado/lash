@@ -12,13 +12,14 @@ class DashboardController extends Controller
     public function eventos()
     {
        
-        $agendamentos = Agendamento::all();
+        $agendamentos = Agendamento::with('cliente')->get();
 
         $eventos = [];
         foreach ($agendamentos as $agendamento) {
             $evento = [
-                "title" => $agendamento->nome,
-                "start" => $agendamento->data,
+                "title" => $agendamento->cliente->nome,
+                "start" => $agendamento->data.'T'. $agendamento->opening_hours,
+                'color' => '#32CD32',
             ];
             $eventos[] = $evento;
         }
@@ -36,6 +37,7 @@ class DashboardController extends Controller
         $data = $response->json();
         
        // dd($agendamento);
+        resolve(App\Http\Controllers\AgendamentoController::class);
         
         return view('/dashboard');
     }

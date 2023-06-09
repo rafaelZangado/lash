@@ -26755,10 +26755,10 @@
     content: "\e64a";
   }
   
-  .fc .fc-button-group .fc-button {
+  /* .fc .fc-button-group .fc-button {
     background-color: #ffffff;
     margin: 0;
-  }
+  } */
   
   .fc .fc-button-group .fc-button.fc-state-active {
     color: #FF4747;
@@ -26821,12 +26821,12 @@
     padding: .5rem;
     font-size: .875rem;
   }
-  
+/*   
   .fc .fc-event {
     border: 0;
     color: #ffffff;
     padding: .5rem;
-  }
+  } */
   
   .fc .fc-event.fc-start {
     background: #4B49AC;

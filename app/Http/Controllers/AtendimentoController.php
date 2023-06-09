@@ -11,16 +11,27 @@ class AtendimentoController extends Controller
 {
     public function index()
     {
-        $procedimentos = Procedimento::all();
-        $clientes = Cliente::all();
+        return view('/fullcalendar');         
+     
+    }
 
-        $agendamentos = Agendamento::with('procedimento', 'cliente')->get();
-
-        return view('atendimento', [
-            'procedimentos' => $procedimentos,
-            'clientes' => $clientes,
-            'agendamentos' => $agendamentos
-        ]);
+    public function eventos()
+    {
+       
+        $agendamentos = Agendamento::with('cliente')->get();
         
+        $eventos = [];
+        foreach ($agendamentos as $agendamento) {
+            $evento = [
+                "title" => $agendamento->cliente->nome,
+                "start" => $agendamento->data,
+            ];
+            $eventos[] = $evento;
+        }
+                
+       // return $agendamento;
+        return response()->json($eventos);
+
+           
     }
 }
