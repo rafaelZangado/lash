@@ -22,7 +22,6 @@ class AgendamentoController extends Controller
     public function index()
     {
         $procedimentos = Procedimento::all();
-        $procedimentos2 = Procedimento::all();
         $clientes = Cliente::all();
 
         $agendamentos = Agendamento::with('procedimento', 'cliente')->get();
@@ -39,16 +38,16 @@ class AgendamentoController extends Controller
         }
          
         
-        $procedimentoKey = $id[37]; // Exemplo de string de procedimentos
+        // $procedimentoKey = $id[37]; // Exemplo de string de procedimentos
 
-        $procedimentoIds = explode(',', $procedimentoKey); // Divide a string em um array de IDs
+        // $procedimentoIds = explode(',', $procedimentoKey); // Divide a string em um array de IDs
 
-        $resultados = Procedimento::whereIn('id', $procedimentoIds)->get(); // Busca os procedimentos pelo array de IDs
+        // $resultados = Procedimento::whereIn('id', $procedimentoIds)->get(); // Busca os procedimentos pelo array de IDs
        
-        // Agora você pode acessar os resultados para cada procedimento
-        foreach ($resultados as $procedimento) {
-          // echo $procedimento->nome;
-        }
+        // // Agora você pode acessar os resultados para cada procedimento
+        // foreach ($resultados as $procedimento) {
+        //   // echo $procedimento->nome;
+        // }
 
         
        // dd($procedimento->nome);
@@ -61,7 +60,6 @@ class AgendamentoController extends Controller
 
         return view('agendamento', [
             'procedimentos' => $procedimentos,
-            'procedimentos' => $procedimentos2,
             'clientes' => $clientes,
             'agendamentos' => $agendamentos,
             'procedimentosPorId' => $procedimentosPorId,
