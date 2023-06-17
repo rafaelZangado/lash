@@ -24,12 +24,19 @@ class DashboardController extends Controller
             $procedimentos = Procedimento::whereIn('id', $procedimentoIds)->get();
             $procedimentoNomes = $procedimentos->pluck('nome')->toArray();
             $total = $procedimentos->sum('preco');
-           
+            $data = $agendamento->data;
+            if($agendamento->status == true){
+              $data  = $agendamento->return_date;
+              $color = "#FFD700";                
+            } else {
+                $color = "#32CD32";
+            }
+            
             $evento = [
                 "id" => $agendamento->id,
                 "title" => $agendamento->cliente->nome,
-                "start" => $agendamento->data.'T'. $agendamento->opening_hours,
-                'color' => '#32CD32',
+                "start" => $data.'T'. $agendamento->opening_hours,
+                'color' =>  $color,
                 'contato' =>  $agendamento->cliente->whastapp,
                 'procedimentos' => $procedimentoNomes,
                 'total' => $total/100

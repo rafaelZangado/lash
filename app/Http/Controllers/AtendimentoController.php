@@ -16,11 +16,21 @@ class AtendimentoController extends Controller
         $procedimentos = Procedimento::all();
         $clientes = Cliente::all();
         $agendamentos = Agendamento::with('procedimento', 'cliente')->get();
+        
+        $id = Agendamento::pluck('procedimento_key', 'id')->all();
+        $procedimentosPorId = [];
+        
+        foreach ($id as $agendamentoId => $procedimentoKey) {
+            $procedimentoIds = explode(',', $procedimentoKey);
+            $nomesProcedimentos = $procedimentos->whereIn('id', $procedimentoIds)->pluck('nome')->all();
+            $procedimentosPorId[$agendamentoId] = $nomesProcedimentos;
+        }
         return view('/fullcalendar', 
         [
             'procedimentos' =>  $procedimentos,
             'clientes' => $clientes,
             'agendamentos' => $agendamentos,
+            'procedimentosPorId' => $procedimentosPorId,
         ]);         
      
     }
@@ -48,13 +58,63 @@ class AtendimentoController extends Controller
         $agendamento->save();
            
     }
+    
+    public function store(Request $request)
+    {      
+        $dados = $request->validate([
+            'date' => 'required|date',
+            'opening_hours' => 'required',
+            'cpf' => 'required',
+            'nome' => 'required',
+            'whatsapp' => 'required|numeric',            
+            'procedimento_key' => 'required|array',           
+        ]);
+              
+        $this->registeragenda($dados );            
+        
+        return redirect()->route('agendamento')->with('success', 'Agendamento atualizado com sucesso.');
+    }
+    
+    public function registercliantes($dados) 
+    {
+        $table_cliente = resolve(Cliente::class);
+
+        $table_cliente->nome = $dados['nome'];
+        $table_cliente->whastapp = $dados['whatsapp'];
+        $table_cliente->cpf = $dados['cpf'];
+        $table_cliente->email = '';
+        $table_cliente->instagram = '';
+
+        if($table_cliente->save()) {
+            return $id_cliente = $table_cliente->id;           
+        } else {
+            return redirect()->route('agendamento')->with('error', 'Processo não autorizado.');
+        }
+
+    }
+
+    public function registeragenda($dados) 
+    {
+      
+        $table_agendamento = resolve(Agendamento::class);  
+        $id_cliente = $this->registercliantes($dados);       
+        $table_agendamento->data = $dados['date'];
+        $table_agendamento->opening_hours = $dados['opening_hours'];
+        $table_agendamento->procedimento_key = implode(',', $dados['procedimento_key']);     
+        $table_agendamento->cliente_id = $id_cliente;       
+        $table_agendamento->procedimento_id = 1;     
+        $table_agendamento->status = 0;
+        $table_agendamento->final_time = null;
+        $table_agendamento->return_date = null;
+        $table_agendamento->whastapp = '';
+        $table_agendamento->save();
+    }
 
     public function delete($id)
     {
        
         if ($id) {
-            return true;
-           // Agendamento::find($id)->delete();
+            Agendamento::find($id)->delete();
         }
     }
 }

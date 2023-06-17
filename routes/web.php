@@ -48,4 +48,6 @@ use Illuminate\Support\Facades\Route;
     Route::get('/atendimento', [AtendimentoController::class, 'index'])->name('atendimento');
     Route::get('/start/{id}/start', [AtendimentoController::class, 'start'])->name('start');
     Route::get('/delete/{id}/delete', [AtendimentoController::class, 'delete'])->name('delete');
+    Route::post('/atendimento/store', [AtendimentoController::class, 'store'])->name('atendimentosave');
+
 

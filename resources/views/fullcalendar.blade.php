@@ -61,6 +61,14 @@
                                 value="">
                                 <i class="mdi mdi-delete-forever"></i>
                             </button>
+
+                             <button type="button" class="btn btn-warning btn-icon-text"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#editar"
+                                  id="buttonedite"
+                                value="">
+                                <i class="mdi mdi-cached"></i>                        
+                            </button> 
                         </div>
 						 
 							Agendamento.      
@@ -80,7 +88,7 @@
                 <div class="modal-header">
                     <h4 class="card-title">Criar novo agendamento.</h4>
                 </div>
-                <form class="forms-sample" method="POST" action="{{ route('agendamento-store') }}" id="agendamento-form">
+                <form class="forms-sample" method="POST" action="{{ route('atendimentosave') }}" id="agendamento-form">
                     <div class="modal-body">
                         @csrf
 
@@ -113,11 +121,9 @@
                             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
                                 @foreach ($procedimentos as $procedimento)
                                     <div class="col">
-
                                         <input class="form-check-input" type="checkbox" name="procedimento_key[]"
                                             value="{{ $procedimento->id }}" role="switch" id="flexSwitchCheckChecked">
                                         {{ $procedimento->nome }}
-
                                     </div>
                                 @endforeach
                             </div>
@@ -134,7 +140,52 @@
         </div>
     </div>
 
+    <!--REMANEJAR ATENDIMENTO-->
+    @foreach ($agendamentos as $agendamento)
+        <!-- Modal -->
+        <div class="modal fade col-lg-12" id="editar" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="card-title">Iniciar Atendimento | {{$agendamento->cliente->nome}} </h4>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ route('agendamento-update', $agendamento->id) }}">
+                        @csrf
+                        @method('PUT')
 
+                        <!-- Adicione os campos do formulário que deseja editar -->
+
+                        <div class="form-group">
+                            <input class="form-control" placeholder="dd/mm/yyyy" type="date" name="data" 
+                                value="{{ $agendamento->data }}" id="date-input" min="2023-05-28">
+                        </div>
+
+                        <div class="form-group">
+                        <input class="form-control" type="time" id="appt"  
+                            value="{{$agendamento->opening_hours }}" name="opening_hours" min="09:00" max="18:00" required>
+                        </div>
+
+                        <div class="container text-center">
+                        <div class="row row-cols-3">
+                            <!-- Ativos -->
+                            @foreach ($procedimentosPorId[$agendamento->id] as $nomeProcedimento)
+                                <div class="col">
+                                <div class="form-check form-switch">
+                                    <p>{{ $nomeProcedimento }}</p> 
+                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>                           
+                                </div>                    
+                                </div>
+                            @endforeach
+                        </div>   
+                        </div>                           
+                        <button type="submit" class="btn btn-success btn-rounded btn-fw">Salvar</button>
+                    </form>
+                </div>
+            </div>
+            </div>
+        </div>
+    @endforeach
 
 
 
@@ -205,8 +256,7 @@
                         url: '/delete/' + valorBotao + '/delete',
                         method: 'GET', 
 						success: function(arg) {  
-							//arg.event.remove()
-						
+							//arg.event.remove()						
                         },
                         error: function(error) {
                            console.log('alguma coisa deu errado')
@@ -240,7 +290,7 @@
                     right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
                 },
                 initialView: 'dayGridMonth',
-                initialDate: '2023-01-12',
+                initialDate:  new Date(),
 
                 eventClick: function(arg) {
 					
@@ -255,7 +305,7 @@
                     end = event.end;
                     description = event.description;
 
-                    console.log(id)
+                    console.log(arg)
 
                     document.getElementById("title").innerHTML = title;
                     document.getElementById("contato").innerHTML = contato;
@@ -263,6 +313,11 @@
                     document.getElementById("buttonplay").value = id;
                     document.getElementById("buttondelet").value = id;
 
+                    button = document.getElementById("buttonedite");
+                    button.setAttribute("data-bs-target", "#" + id);
+                    
+                    modal = document.getElementById("editar");
+                    modal.setAttribute("id", id)
 
                     procedimentosContainer = document.getElementById("procedimentos");
 
