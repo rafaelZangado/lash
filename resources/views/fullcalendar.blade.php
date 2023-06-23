@@ -69,17 +69,15 @@
                                 value="">
                                 <i class="mdi mdi-cached"></i>                        
                             </button> 
-                        </div>
-						 
-							Agendamento.      
-							Retorno.
-							Modelo               
+                        </div>             
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+    <label>Descrição </label>
+    <hr>
+    <b style="color: #32CD32">Agendamento  </b><br> <b style="color: #9400D3">Retorno </b> 
     <!--CRIAR AGENDAMENTO-->
     <div class="modal fade col-lg-12" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -171,12 +169,25 @@
                             <!-- Ativos -->
                             @foreach ($procedimentosPorId[$agendamento->id] as $nomeProcedimento)
                                 <div class="col">
-                                <div class="form-check form-switch">
-                                    <p>{{ $nomeProcedimento }}</p> 
-                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>                           
-                                </div>                    
-                                </div>
+                                    <div class="form-check form-switch">
+                                        <p>{{ $nomeProcedimento }}</p> 
+                                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>                           
+                                    </div>                    
+                                </div>                                         
+                            @endforeach                            
+                            @php
+                                $diferentes = array_diff($pro, $procedimentosPorId[$agendamento->id]);
+                            @endphp
+
+                            @foreach ($diferentes as $diferente)
+                                <div class="col">
+                                    <div class="form-check form-switch">                                        
+                                        <p>{{ $diferente }}</p> 
+                                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" >                           
+                                    </div>                    
+                                </div> 
                             @endforeach
+                                           
                         </div>   
                         </div>                           
                         <button type="submit" class="btn btn-success btn-rounded btn-fw">Salvar</button>

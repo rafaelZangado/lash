@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Agendamento;
 use App\Models\Procedimento;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class DashboardController extends Controller
 {
