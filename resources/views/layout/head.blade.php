@@ -1,5 +1,5 @@
-  <script src="https://unpkg.com/slim-select@latest/dist/slimselect.min.js"></script>
-  <link href="https://unpkg.com/slim-select@latest/dist/slimselect.css" rel="stylesheet">
+<script src="https://unpkg.com/slim-select@latest/dist/slimselect.min.js"></script>
+<link href="https://unpkg.com/slim-select@latest/dist/slimselect.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
 
 {{-- 
