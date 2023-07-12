@@ -216,7 +216,7 @@
             swalWithBootstrapButtons.fire({
                 icon: 'question',
                 title: 'Iniciar Atendimento',
-                text: 'Você deseja realmente iniciar o atendimento ?',
+                text: 'Você deseja realmente iniciar o atendimento ?°',
                 showCancelButton: true,
                 confirmButtonText: 'Sim',
                 cancelButtonText: 'Não',

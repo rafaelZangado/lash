@@ -26,16 +26,9 @@ class AtendimentoController extends Controller
             $procedimentoIds = explode(',', $procedimentoKey);
             $nomesProcedimentos = $procedimentos->whereIn('id', $procedimentoIds)->pluck('nome')->all();
             $procedimentosPorId[$agendamentoId] = $nomesProcedimentos;
-            $pro = $procedimentos->pluck('nome')->all();
-         
-            
-           
-           
         }
-       
-       
-
-
+        $pro = $procedimentos->pluck('nome')->all();          
+      
         return view('/fullcalendar', 
         [
             'procedimentos' =>  $procedimentos,
