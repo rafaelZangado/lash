@@ -9,5 +9,5 @@
 </script>
 
 <style>
-    /* Estilos do componente aqui */
+    /* Estilos dos componente aqui */
 </style>
