@@ -27,9 +27,9 @@ class AtendimentoController extends Controller
             $nomesProcedimentos = $procedimentos->whereIn('id', $procedimentoIds)->pluck('nome')->all();
             $procedimentosPorId[$agendamentoId] = $nomesProcedimentos;
         }
-        $pro = $procedimentos->pluck('nome')->all();          
-      
-        return view('/fullcalendar', 
+        $pro = $procedimentos->pluck('nome')->all();
+
+        return view('/fullcalendar',
         [
             'procedimentos' =>  $procedimentos,
             'clientes' => $clientes,
@@ -57,7 +57,7 @@ class AtendimentoController extends Controller
         $dataFinal = $dataInicial->addDays($dataRetur);
 
         $agendamento->start_time = $horaAtual->format('H:i');
-        $agendamento->status = true;
+        $agendamento->status = 'rescheduled';
         $agendamento->return_date = $dataFinal->toDateString();
 
         $agendamento->save();
@@ -108,7 +108,7 @@ class AtendimentoController extends Controller
         $table_agendamento->procedimento_key = implode(',', $dados['procedimento_key']);
         $table_agendamento->cliente_id = $id_cliente;
         $table_agendamento->procedimento_id = 1;
-        $table_agendamento->status = 'cancel_atend';
+        $table_agendamento->status = 0;
         $table_agendamento->final_time = null;
         $table_agendamento->return_date = null;
         $table_agendamento->whastapp = '';
