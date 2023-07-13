@@ -51,13 +51,13 @@
                             <div id="total"></div>
                         </h4>
                         <div class="card-body">
-                            
+
                             <button type="button" class="btn btn-primary btn-rounded btn-icon-text" id="buttonplay"
                                 value="">
                                 <i class="mdi mdi-play-circle-outline"></i>
                             </button>
 
-                            <button type="button" class="btn btn-danger btn-icon-text" id="buttondelet"
+                            <button type="button" class="btn btn-danger btn-icon-text" id="buttoncancelatendimento"
                                 value="">
                                 <i class="mdi mdi-delete-forever"></i>
                             </button>
@@ -67,9 +67,9 @@
                                  data-bs-target="#editar"
                                   id="buttonedite"
                                 value="">
-                                <i class="mdi mdi-cached"></i>                        
-                            </button> 
-                        </div>             
+                                <i class="mdi mdi-cached"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -77,7 +77,7 @@
     </div>
     <label>Descrição </label>
     <hr>
-    <b style="color: #32CD32">Agendamento  </b><br> <b style="color: #9400D3">Retorno </b> 
+    <b style="color: #32CD32">Agendamento  </b><br> <b style="color: #9400D3">Retorno </b>
     <!--CRIAR AGENDAMENTO-->
     <div class="modal fade col-lg-12" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -155,12 +155,12 @@
                         <!-- Adicione os campos do formulário que deseja editar -->
 
                         <div class="form-group">
-                            <input class="form-control" placeholder="dd/mm/yyyy" type="date" name="data" 
+                            <input class="form-control" placeholder="dd/mm/yyyy" type="date" name="data"
                                 value="{{ $agendamento->data }}" id="date-input" min="2023-05-28">
                         </div>
 
                         <div class="form-group">
-                        <input class="form-control" type="time" id="appt"  
+                        <input class="form-control" type="time" id="appt"
                             value="{{$agendamento->opening_hours }}" name="opening_hours" min="09:00" max="18:00" required>
                         </div>
 
@@ -170,26 +170,26 @@
                             @foreach ($procedimentosPorId[$agendamento->id] as $nomeProcedimento)
                                 <div class="col">
                                     <div class="form-check form-switch">
-                                        <p>{{ $nomeProcedimento }}</p> 
-                                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>                           
-                                    </div>                    
-                                </div>                                         
-                            @endforeach                            
+                                        <p>{{ $nomeProcedimento }}</p>
+                                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                                    </div>
+                                </div>
+                            @endforeach
                             @php
                                 $diferentes = array_diff($pro, $procedimentosPorId[$agendamento->id]);
                             @endphp
 
                             @foreach ($diferentes as $diferente)
                                 <div class="col">
-                                    <div class="form-check form-switch">                                        
-                                        <p>{{ $diferente }}</p> 
-                                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" >                           
-                                    </div>                    
-                                </div> 
+                                    <div class="form-check form-switch">
+                                        <p>{{ $diferente }}</p>
+                                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" >
+                                    </div>
+                                </div>
                             @endforeach
-                                           
-                        </div>   
-                        </div>                           
+
+                        </div>
+                        </div>
                         <button type="submit" class="btn btn-success btn-rounded btn-fw">Salvar</button>
                     </form>
                 </div>
@@ -201,9 +201,9 @@
 
 
     <script>
-	   
+
         document.getElementById('buttonplay').addEventListener('click', function() {
-			
+
 			valorBotao = this.value;
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -230,14 +230,14 @@
                     )
                     $.ajax({
                         url: '/start/' + valorBotao + '/start',
-                        method: 'GET', 
+                        method: 'GET',
                     });
                 }
             })
         });
 
-			
-        document.getElementById('buttondelet').addEventListener('click', function() {
+
+        document.getElementById('buttoncancelatendimento').addEventListener('click', function() {
 			valorBotao = this.value;
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -262,12 +262,12 @@
                         'que pena, o atendimento foi encerrado.',
                         'success'
                     )
-					
+
                     $.ajax({
-                        url: '/delete/' + valorBotao + '/delete',
-                        method: 'GET', 
-						success: function(arg) {  
-							//arg.event.remove()						
+                        url: '/cancel/' + valorBotao + '/cancel',
+                        method: 'GET',
+						success: function(arg) {
+							//arg.event.remove()
                         },
                         error: function(error) {
                            console.log('alguma coisa deu errado')
@@ -304,7 +304,7 @@
                 initialDate:  new Date(),
 
                 eventClick: function(arg) {
-					
+
                     event = arg.event;
                     title = event.title;
                     start = event.start;
@@ -322,11 +322,11 @@
                     document.getElementById("contato").innerHTML = contato;
                     document.getElementById("total").innerHTML = 'Total R$ ' + total;
                     document.getElementById("buttonplay").value = id;
-                    document.getElementById("buttondelet").value = id;
+                    document.getElementById("buttoncancelatendimento").value = id;
 
                     button = document.getElementById("buttonedite");
                     button.setAttribute("data-bs-target", "#" + id);
-                    
+
                     modal = document.getElementById("editar");
                     modal.setAttribute("id", id)
 
@@ -367,7 +367,7 @@
                 method: 'GET',
                 success: function(response) {
                     var eventos = response.map(function(evento) {
-                       
+
                         return {
                             id: evento.id,
                             title: evento.title,
