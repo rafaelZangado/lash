@@ -7,12 +7,12 @@ use App\Models\Procedimento;
 
 class DashboardController extends Controller
 {
-    
+
     public function eventos()
     {
-       
+
         $agendamentos = Agendamento::with('cliente', 'procedimento')->get();
-        
+
         $eventos = [];
         $procedimentos = [];
         foreach ($agendamentos as $agendamento) {
@@ -23,13 +23,15 @@ class DashboardController extends Controller
             $procedimentoNomes = $procedimentos->pluck('nome')->toArray();
             $total = $procedimentos->sum('preco');
             $data = $agendamento->data;
-            if($agendamento->status == true){
+            if($agendamento->status == 'rescheduled'){
               $data  = $agendamento->return_date;
-              $color = "#FFD700";                
+              $color = "#FFD700";
+            } elseif ($agendamento->status === 'cancel_atend'){
+                $color = "#FF0000";
             } else {
                 $color = "#32CD32";
             }
-            
+
             $evento = [
                 "id" => $agendamento->id,
                 "title" => $agendamento->cliente->nome,
@@ -40,12 +42,12 @@ class DashboardController extends Controller
                 'total' => $total/100
             ];
             $eventos[] = $evento;
-        }       
-       
-        return response()->json($eventos);   
+        }
+
+        return response()->json($eventos);
     }
 
-    public function index(){        
+    public function index(){
         return view('/dashboard');
     }
 
@@ -53,7 +55,7 @@ class DashboardController extends Controller
 
         $agendamento = Agendamento::all();
         $agendamento =  json_encode($agendamento);
-        
+
         return view('/elementoTeste', [
            'agendamento' => $agendamento
         ]);
