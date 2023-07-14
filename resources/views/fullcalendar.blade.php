@@ -12,72 +12,116 @@
             max-width: 100%;
             margin: 0 auto;
             font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-            font-size: 13px;
+            font-size: 103%;
             padding: 0;
+        }
+
+        .custom-border-cancelado {
+            border-left: 4px solid rgb(255, 30, 0)!important; /* Cor da borda para o primeiro elemento */
+        }
+
+        .custom-border-agendado {
+            border-left: 4px solid rgb(69, 183, 3)!important; /* Cor da borda para o segundo elemento */
+        }
+
+        .custom-border-retorno {
+            border-left: 4px solid rgb(255, 215, 0)!important; /* Cor da borda para o terceiro elemento */
+        }
+
+        .custom-border-feriado {
+            border-left: 4px solid rgb(239, 16, 255)!important; /* Cor da borda para o terceiro elemento */
         }
     </style>
     <div class="row">
-        <div class="col-md-7 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-
-                    <div id='calendar'></div>
-
+        <div class="col-md-4">
+           <div class="fc-external-events">
+                <div class="fc-event custom-border-cancelado">
+                    <p>Atendimento cancelado</p>
+                    <p class="small-text"></p>
+                    <p class="text-muted mb-0">cancelado</p>
+                </div>
+                <div class="fc-event custom-border-agendado">
+                    <p>Atendimento agendado</p>
+                    <p class="small-text"></p>
+                    <p class="text-muted mb-0">agendamento</p>
+                </div>
+                <div class="fc-event custom-border-retorno">
+                    <p>Retorno do atendimento</p>
+                    <p class="small-text"></p>
+                    <p class="text-muted mb-0">Retorno</p>
+                </div>
+                <div class="fc-event custom-border-feriado">
+                    <p>Feriado</p>
+                    <p class="small-text"></p>
+                    <p class="text-muted mb-0">Feriado / Data </p>
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-5 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
+                    <center>
+                  <p class="card-title">
+                        🥳🎊🎉 Aniversariante do Mes 🥳🎊🎉
+                    </p>
+                </center>
+                  <div class="list-wrapper pt-4">
+                      <ul class="icon-data-list">
+                          <li>
+                              <div class="d-flex">
+                              <div>
+                                    <p class="text-info mb-1">Isabella Becker</p>
+                                    <p class="mb-0">Data 15/ Julho / 2023 (<b>HOJE</b>)</p>
+                                    <p class="text-muted mb-0">
+                                        <a href="#"> Desconto de 10% </a>
+                                    </p>
+                                    <label>Uma mensagem será enviada para esse cliente HOJE !!! </label>
+                              </div>
+                              </div>
+                          </li>
 
-                            <h5 class="card-title">
-                                <div id="title"></div>
-                            </h5>
+                          <li>
+                              <div class="d-flex">
+                              <div>
+                                    <p class="text-info mb-1">Maria silvar</p>
+                                    <p class="mb-0">Data 16/ Julho / 2023 (<b>AMANHÃ</b>)</p>
+                                    <p class="text-muted mb-0">
+                                        <a href="#"> Desconto de 10% </a>
+                                    </p>
+                                    <label>Uma mensagem será enviada para esse cliente AMANHÃ !!! </label>
+                              </div>
+                              </div>
+                          </li>
 
-                            <p class="card-text">
-                            <div id="contato"></div>
-                            </p>
-                        </div>
+                          <li>
+                              <div class="d-flex">
+                              <div>
+                                    <p class="text-info mb-1">Julia Campos</p>
+                                    <p class="mb-0">Data 24/ Julho / 2023 </p>
+                                    <p class="text-muted mb-0">
+                                        <a href="#"> Desconto de 10% </a>
+                                    </p>
+                                    <label>Uma mensagem será enviada para esse cliente</label>
+                              </div>
+                              </div>
+                          </li>
 
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <div id="procedimentos"></div>
-                            </li>
-                        </ul>
-                        <h4>
-                            <div id="total"></div>
-                        </h4>
-                        <div class="card-body">
+                      </ul>
+                  </div>
+                </div>
+              </div>
+        </div>
 
-                            <button type="button" class="btn btn-primary btn-rounded btn-icon-text" id="buttonplay"
-                                value="">
-                                <i class="mdi mdi-play-circle-outline"></i>
-                            </button>
-
-                            <button type="button" class="btn btn-danger btn-icon-text" id="buttoncancelatendimento"
-                                value="">
-                                <i class="mdi mdi-delete-forever"></i>
-                            </button>
-
-                             <button type="button" class="btn btn-warning btn-icon-text"
-                                 data-bs-toggle="modal"
-                                 data-bs-target="#editar"
-                                  id="buttonedite"
-                                value="">
-                                <i class="mdi mdi-cached"></i>
-                            </button>
-                        </div>
-                    </div>
+        <div class="col-md-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div id='calendar'></div>
                 </div>
             </div>
         </div>
     </div>
-    <label>Descrição </label>
-    <hr>
-    <b style="color: #32CD32">Agendamento  </b><br> <b style="color: #9400D3">Retorno </b>
+
+
+
     <!--CRIAR AGENDAMENTO-->
     <div class="modal fade col-lg-12" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -134,6 +178,66 @@
                         <button type="submit" class="btn btn-success btn-rounded btn-fw">Salvar</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!--CRIAR AGENDAMENTO-->
+    <div class="modal fade col-lg-12" id="modalCalendario" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="card-title">Criar novo agendamento.</h4>
+                </div>
+                 <div class="col-md-3 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+
+                            <h5 class="card-title">
+                                <div id="title"></div>
+                            </h5>
+
+                            <p class="card-text">
+                            <div id="contato"></div>
+                            </p>
+                        </div>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <div id="procedimentos"></div>
+                            </li>
+                        </ul>
+                        <h4>
+                            <div id="total"></div>
+                        </h4>
+                        <div class="card-body">
+                            <div class="col-md-2 grid-margin stretch-card">
+                            <button type="button" class="btn btn-primary btn-rounded btn-icon-text" id="buttonplay"
+                                value="">
+                                <i class="mdi mdi-play-circle-outline"></i>
+                            </button>
+
+                            <button type="button" class="btn btn-danger btn-icon-text" id="buttoncancelatendimento"
+                                value="">
+                                <i class="mdi mdi-delete-forever"></i>
+                            </button>
+
+                             <button type="button" class="btn btn-warning btn-icon-text"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#editar"
+                                  id="buttonedite"
+                                value="">
+                                <i class="mdi mdi-cached"></i>
+                            </button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
             </div>
         </div>
     </div>
@@ -304,6 +408,11 @@
                 initialDate:  new Date(),
 
                 eventClick: function(arg) {
+
+
+                    // Exibir o modal
+                    var modal = new bootstrap.Modal(document.getElementById('modalCalendario'));
+                    modal.show();
 
                     event = arg.event;
                     title = event.title;
