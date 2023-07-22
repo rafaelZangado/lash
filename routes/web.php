@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 
 //Rota Dashboard
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+   // Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/teste', [DashboardController::class, 'teste'])->name('teste');
     Route::get('/eventos', [DashboardController::class, 'eventos'])->name('eventos');
 
@@ -45,7 +45,7 @@ use Illuminate\Support\Facades\Route;
     Route::delete('/agendamento/{id}', [AgendamentoController::class, 'delete'])->name('delete');
 
 //Atendimento
-    Route::get('/atendimento', [AtendimentoController::class, 'index'])->name('atendimento');
+    Route::get('/', [AtendimentoController::class, 'index'])->name('atendimento');
     Route::get('/start/{id}/start', [AtendimentoController::class, 'start'])->name('start');
     Route::get('/delete/{id}/delete', [AtendimentoController::class, 'delete'])->name('delete');
     Route::get('/cancel/{id}/cancel', [AtendimentoController::class, 'cancel'])->name('cancel');
