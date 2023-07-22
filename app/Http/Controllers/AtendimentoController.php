@@ -8,6 +8,7 @@ use App\Models\Procedimento;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class AtendimentoController extends Controller
 {
@@ -70,13 +71,16 @@ class AtendimentoController extends Controller
             'opening_hours' => 'required',
             'cpf' => 'required',
             'nome' => 'required',
-            'whatsapp' => 'required|numeric',
+            'whatsapp' => 'required',
             'procedimento_key' => 'required|array',
         ]);
 
+        $dados['cpf'] = Str::replace(['.', '-'], '', $dados['cpf']);
+        $dados['whatsapp'] = Str::replace(['(', ')', '-'], '', $dados['whatsapp']);
+
         $this->registeragenda($dados );
 
-        return redirect()->route('agendamento')->with('success', 'Agendamento atualizado com sucesso.');
+        return redirect()->route('atendimento')->with('success', 'Agendamento atualizado com sucesso.');
     }
 
     public function registercliantes($dados)
