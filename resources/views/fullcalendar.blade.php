@@ -146,7 +146,7 @@
 
                         <div class="row form-group">
                             <div class="col">
-                                <input class="form-control" placeholder="999.999.999-99" type="text" name="cpf"
+                                <input class="form-control" placeholder="999.999.999-99" type="text" id="cpf"  maxlength="14" name="cpf"
                                     id="date-input">
                             </div>
                             <div class="col">
@@ -154,7 +154,8 @@
                                     required>
                             </div>
                             <div class="col">
-                                <input class="form-control" placeholder="whatsapp" type="text" id="appt"
+
+                                <input class="form-control" placeholder="(99) 9 9999-9999" type="text" id="phone" onkeypress="mask(this, mphone);" onblur="mask(this, mphone);"
                                     name="whatsapp" required>
                             </div>
                         </div>
@@ -293,7 +294,20 @@
 
 
     <script>
+        document.getElementById('cpf').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            const length = value.length;
 
+            if (length > 3 && length <= 6) {
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            } else if (length > 6 && length <= 9) {
+            value = value.replace(/(\d{3})(\d{3})(\d)/, '$1.$2.$3');
+            } else if (length > 9) {
+            value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+            }
+
+            e.target.value = value;
+        });
         document.getElementById('buttonplay').addEventListener('click', function() {
 
 			valorBotao = this.value;

@@ -18,6 +18,7 @@
         "vue-template-compiler": "^2.7.14"
     },
     "dependencies": {
+        "inputmask": "^5.0.8",
         "vue": "^3.3.4"
     }
 }
