@@ -1,6 +1,6 @@
-@extends('blanck')
-@section('title', 'Agendamento')
-@section('tela')
+@extends('dashboard') <!-- Agora agenda.blade.php estende dashboard.blade.php -->
+
+@section('agenda')
     <script src="{{ asset('js/fullcalendar/index.global.js') }}"></script>
     <script src="{{ asset('js/fullcalendar/pt-br.global.js') }}"></script>
     <!-- Include a required theme -->
@@ -31,6 +31,9 @@
         .custom-border-feriado {
             border-left: 4px solid rgb(239, 16, 255)!important; /* Cor da borda para o terceiro elemento */
         }
+        .custom-border-confreturn {
+            border-left: 4px solid rgb(255, 116, 16)!important; /* Cor da borda para o terceiro elemento */
+        }
     </style>
     <div class="row">
         <div class="col-md-4">
@@ -54,6 +57,11 @@
                     <p>Feriado</p>
                     <p class="small-text"></p>
                     <p class="text-muted mb-0">Feriado / Data </p>
+                </div>
+                <div class="fc-event custom-border-confreturn">
+                    <p>Confirmar retorno</p>
+                    <p class="small-text"></p>
+                    <p class="text-muted mb-0">Voce deve confirmar o retorno do atendimento</p>
                 </div>
             </div>
 
@@ -104,7 +112,6 @@
                               </div>
                               </div>
                           </li>
-
                       </ul>
                   </div>
                 </div>
@@ -119,8 +126,6 @@
             </div>
         </div>
     </div>
-
-
 
     <!--CRIAR AGENDAMENTO-->
     <div class="modal fade col-lg-12" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -240,8 +245,6 @@
     </div>
 
     <!--REMANEJAR ATENDIMENTO-->
-    {{-- {{dd($agendamentos)}} --}}
-
     @foreach ($agendamentos as $agendamento)
         <!-- Modal -->
         <div class="modal fade col-lg-12" id="editar-{{$agendamento->id}}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -291,7 +294,6 @@
             </div>
         </div>
     @endforeach
-
 
     <script>
         document.getElementById('cpf').addEventListener('input', function(e) {
