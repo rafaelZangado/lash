@@ -8,7 +8,7 @@
             <div class="card-body">
                 <h4 class="card-title">Procedimento</h4>
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
-                    Add novo procedimento            
+                    Add novo procedimento
                 </button>
 
                 <hr>
@@ -18,8 +18,8 @@
                         <tr>
                             <th>Titulo</th>
                             <th>Descrição</th>
-                            <th>R$ valor</th> 
-                            <th>Ação</th>                    
+                            <th>R$ valor</th>
+                            <th>Ação</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -27,18 +27,18 @@
                             <tr>
                                 <td>{{ $procedimento->nome }}</td>
                                 <td>{{ $procedimento->descricao }}</td>
-                                <td>{{ $procedimento->preco }}</td>    
+                                <td>{{ $procedimento->preco }}</td>
                                 <td>
                                     <a href="{{ route('procedimentoEdite', ['id' => $procedimento->id]) }}">
                                         Editar
                                     </a> |
                                     <a href="{{ route('procedimentoDelet', ['id' => $procedimento->id]) }}">
                                         Deletar
-                                    </a>        
-                                </td>               
-                            </tr> 
+                                    </a>
+                                </td>
+                            </tr>
                         @endforeach
-                                    
+
                     </tbody>
                 </table>
                 </div>
@@ -63,17 +63,13 @@
                     <input type="text" name='descricao' class="form-control" id="exampleInputUsername1" placeholder="Descrição">
                 </div>
                 <div class="form-group">
-                    <input type="text" name='preco' class="form-control" id="exampleInputUsername1" placeholder="R$ 0.00">
+                    <input type="text" name='preco' class="form-control" id="valor" id="exampleInputUsername1" onkeyup="moeda()" placeholder="R$ 0.00">
                 </div>
-                <button >Salvar </button>
-
-            
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Salvar </button>
+                </div>
             </form>
         </div>
-        {{-- <div class="modal-footer">
-            <button type="button" class="btn btn-primary">Salvar </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        </div> --}}
         </div>
     </div>
     </div>
