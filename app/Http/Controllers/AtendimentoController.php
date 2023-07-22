@@ -19,7 +19,6 @@ class AtendimentoController extends Controller
 
         $id = Agendamento::pluck('procedimento_key', 'id')->all();
         $procedimentosPorId = [];
-        //vou pegar o id e comparar com o $procedimentosPorId[$agendamentoId] pra verificar se ja existe. caso exista eu não preciso exibir na tela novamente
         $procedimentos->pluck('nome')->toArray();
 
         foreach ($id as $agendamentoId => $procedimentoKey) {
@@ -27,7 +26,7 @@ class AtendimentoController extends Controller
             $nomesProcedimentos = $procedimentos->whereIn('id', $procedimentoIds)->pluck('nome')->all();
             $procedimentosPorId[$agendamentoId] = $nomesProcedimentos;
         }
-        $pro = $procedimentos->pluck('nome')->all();
+        $pro = $procedimentos->pluck('nome', 'id')->all();
 
         return view('/fullcalendar',
         [
