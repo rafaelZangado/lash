@@ -108,7 +108,7 @@
                       </ul>
                   </div>
                 </div>
-              </div>
+            </div>
         </div>
 
         <div class="col-md-8 grid-margin stretch-card">
@@ -188,120 +188,108 @@
         <div class="modal-dialog  modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="card-title">Criar novo agendamento.</h4>
+                    <h4 class="card-title">Atendimento para - <div id="title"></div></h4>
                 </div>
-                 <div class="col-md-3 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-
-                            <h5 class="card-title">
-                                <div id="title"></div>
-                            </h5>
-
-                            <p class="card-text">
-                            <div id="contato"></div>
-                            </p>
-                        </div>
-
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <div id="procedimentos"></div>
-                            </li>
-                        </ul>
-                        <h4>
-                            <div id="total"></div>
-                        </h4>
-                        <div class="card-body">
-                            <div class="col-md-2 grid-margin stretch-card">
-                            <button type="button" class="btn btn-primary btn-rounded btn-icon-text" id="buttonplay"
+                <div class="card">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Contato</th>
+                                <th scope="col">Procedimento</th>
+                                <th scope="col">R$ TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">
+                                    <div id="contato"></div>
+                                </th>
+                                <td>
+                                    <div id="procedimentos"></div>
+                                </td>
+                                <td>
+                                    <div id="total"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-rounded btn-icon-text" id="buttonplay"
                                 value="">
                                 <i class="mdi mdi-play-circle-outline"></i>
-                            </button>
+                        </button>
 
-                            <button type="button" class="btn btn-danger btn-icon-text" id="buttoncancelatendimento"
-                                value="">
-                                <i class="mdi mdi-delete-forever"></i>
-                            </button>
+                        <button type="button" class="btn btn-danger btn-icon-text" id="buttoncancelatendimento"
+                            value="">
+                            <i class="mdi mdi-delete-forever"></i>
+                        </button>
 
-                             <button type="button" class="btn btn-warning btn-icon-text"
-                                 data-bs-toggle="modal"
-                                 data-bs-target="#editar"
-                                  id="buttonedite"
-                                value="">
-                                <i class="mdi mdi-cached"></i>
-                            </button>
-                        </div>
-                    </div>
+                            <button type="button" class="btn btn-warning btn-icon-text"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editar"
+                                id="buttonedite"
+                            value="">
+                            <i class="mdi mdi-cached"></i>
+                        </button>
+
                     </div>
                 </div>
-            </div>
-        </div>
             </div>
         </div>
     </div>
 
     <!--REMANEJAR ATENDIMENTO-->
+    {{-- {{dd($agendamentos)}} --}}
+
     @foreach ($agendamentos as $agendamento)
         <!-- Modal -->
-        <div class="modal fade col-lg-12" id="editar" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog  modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="card-title">Iniciar Atendimento | {{$agendamento->cliente->nome}} </h4>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="{{ route('agendamento-update', $agendamento->id) }}">
-                        @csrf
-                        @method('PUT')
+        <div class="modal fade col-lg-12" id="editar-{{$agendamento->id}}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="card-title">Iniciar Atendimento | {{$agendamento->cliente->nome}} </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="{{ route('agendamento-update', $agendamento->id) }}">
+                            @csrf
+                            @method('PUT')
+                            <div class="form-group">
+                                <input class="form-control" placeholder="dd/mm/yyyy" type="date" name="data"
+                                    value="{{ $agendamento->data }}" id="date-input" min="2023-05-28">
+                            </div>
 
-                        <!-- Adicione os campos do formulário que deseja editar -->
+                            <div class="form-group">
+                                <input class="form-control" type="time" id="appt" value="{{$agendamento->opening_hours }}" name="opening_hours" min="09:00" max="18:00" required>
+                            </div>
 
-                        <div class="form-group">
-                            <input class="form-control" placeholder="dd/mm/yyyy" type="date" name="data"
-                                value="{{ $agendamento->data }}" id="date-input" min="2023-05-28">
-                        </div>
-
-                        <div class="form-group">
-                        <input class="form-control" type="time" id="appt"
-                            value="{{$agendamento->opening_hours }}" name="opening_hours" min="09:00" max="18:00" required>
-                        </div>
-
-                        <div class="container text-center">
-                        <div class="row row-cols-3">
-                            <!-- Ativos -->
-                            @foreach ($procedimentosPorId[$agendamento->id] as $nomeProcedimento)
-                                <div class="col">
-                                    <div class="form-check form-switch">
-                                        <p>{{ $nomeProcedimento }}</p>
-                                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
-                                    </div>
+                            <div class="form-group container text-center">
+                                <div class="row row-cols-3">
+                                    <!-- Ativos -->
+                                    @php
+                                        $diferentes = array_diff($pro, $procedimentosPorId[$agendamento->id]);
+                                    @endphp
+                                    @foreach ($pro as $key => $idDiferente)
+                                        <div class="col">
+                                            <div class="form-check form-switch">
+                                                <p>{{ $idDiferente }}</p>
+                                                <input class="form-check-input" type="checkbox"
+                                                    role="switch" name="procedimento_key[]"
+                                                    value="{{ $key }}"
+                                                    id="flexSwitchCheckChecked" {{ in_array($idDiferente, $diferentes) ? '' : 'checked' }} >
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
-                            @endforeach
-                            @php
-                                $diferentes = array_diff($pro, $procedimentosPorId[$agendamento->id]);
-                            @endphp
-
-                            @foreach ($diferentes as $diferente)
-                                <div class="col">
-                                    <div class="form-check form-switch">
-                                        <p>{{ $diferente }}</p>
-                                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" >
-                                    </div>
-                                </div>
-                            @endforeach
-
-                        </div>
-                        </div>
-                        <button type="submit" class="btn btn-success btn-rounded btn-fw">Salvar</button>
-                    </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-success btn-rounded btn-fw">Salvar</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
             </div>
         </div>
     @endforeach
-
 
 
     <script>
@@ -409,7 +397,6 @@
 
                 eventClick: function(arg) {
 
-
                     // Exibir o modal
                     var modal = new bootstrap.Modal(document.getElementById('modalCalendario'));
                     modal.show();
@@ -425,8 +412,6 @@
                     end = event.end;
                     description = event.description;
 
-                    console.log(arg)
-
                     document.getElementById("title").innerHTML = title;
                     document.getElementById("contato").innerHTML = contato;
                     document.getElementById("total").innerHTML = 'Total R$ ' + total;
@@ -434,13 +419,11 @@
                     document.getElementById("buttoncancelatendimento").value = id;
 
                     button = document.getElementById("buttonedite");
-                    button.setAttribute("data-bs-target", "#" + id);
+                    button.setAttribute("data-bs-target", "#editar-" + id);
 
                     modal = document.getElementById("editar");
-                    modal.setAttribute("id", id)
 
                     procedimentosContainer = document.getElementById("procedimentos");
-
                     procedimentosContainer.innerHTML = '';
 
                     procedimentos.forEach(function(procedimento) {
@@ -452,6 +435,8 @@
                         ul.appendChild(li);
                         procedimentosContainer.appendChild(ul);
                     });
+
+                    modal.setAttribute("id", "editar-" + id);
                 },
 
                 navLinks: true, // can click day/week names to navigate views

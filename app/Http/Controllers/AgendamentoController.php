@@ -27,33 +27,19 @@ class AgendamentoController extends Controller
         $agendamentos = Agendamento::with('procedimento', 'cliente')->get();
 
         $id = Agendamento::pluck('procedimento_key', 'id')->all();
-       
-        
+
+
         $procedimentosPorId = [];
-        
+
         foreach ($id as $agendamentoId => $procedimentoKey) {
             $procedimentoIds = explode(',', $procedimentoKey);
             $nomesProcedimentos = $procedimentos->whereIn('id', $procedimentoIds)->pluck('nome')->all();
             $procedimentosPorId[$agendamentoId] = $nomesProcedimentos;
         }
-         
-        
-        // $procedimentoKey = $id[37]; // Exemplo de string de procedimentos
 
-        // $procedimentoIds = explode(',', $procedimentoKey); // Divide a string em um array de IDs
-
-        // $resultados = Procedimento::whereIn('id', $procedimentoIds)->get(); // Busca os procedimentos pelo array de IDs
-       
-        // // Agora você pode acessar os resultados para cada procedimento
-        // foreach ($resultados as $procedimento) {
-        //   // echo $procedimento->nome;
-        // }
-
-        
-       // dd($procedimento->nome);
         $agendamentos->map(function ($agendamento) {
-            $agendamento->data = date('d/m/Y', strtotime($agendamento->data));  
-            
+            $agendamento->data = date('d/m/Y', strtotime($agendamento->data));
+
             return $agendamento;
         });
 
@@ -63,27 +49,27 @@ class AgendamentoController extends Controller
             'clientes' => $clientes,
             'agendamentos' => $agendamentos,
             'procedimentosPorId' => $procedimentosPorId,
-          
+
         ]);
     }
 
     public function store(Request $request)
-    {      
+    {
         $dados = $request->validate([
             'date' => 'required|date',
             'opening_hours' => 'required',
             'cpf' => 'required',
             'nome' => 'required',
-            'whatsapp' => 'required|numeric',            
-            'processo' => 'required|array',           
+            'whatsapp' => 'required|numeric',
+            'processo' => 'required|array',
         ]);
-              
-        $this->registeragenda($dados );            
-        
+
+        $this->registeragenda($dados );
+
         return redirect()->route('agendamento')->with('success', 'Agendamento atualizado com sucesso.');
     }
-    
-    public function registercliantes($dados) 
+
+    public function registercliantes($dados)
     {
         $table_cliente = resolve(Cliente::class);
 
@@ -94,22 +80,22 @@ class AgendamentoController extends Controller
         $table_cliente->instagram = '';
 
         if($table_cliente->save()) {
-            return $id_cliente = $table_cliente->id;           
+            return $id_cliente = $table_cliente->id;
         } else {
             return redirect()->route('agendamento')->with('error', 'Processo não autorizado.');
         }
 
     }
 
-    public function registeragenda($dados) 
+    public function registeragenda($dados)
     {
-        $table_agendamento = resolve(Agendamento::class);  
-        $id_cliente = $this->registercliantes($dados);       
+        $table_agendamento = resolve(Agendamento::class);
+        $id_cliente = $this->registercliantes($dados);
         $table_agendamento->data = $dados['date'];
         $table_agendamento->opening_hours = $dados['opening_hours'];
-        $table_agendamento->procedimento_key = implode(',', $dados['processo']);  
-        $table_agendamento->cliente_id = $id_cliente;       
-        $table_agendamento->procedimento_id = 1;     
+        $table_agendamento->procedimento_key = implode(',', $dados['processo']);
+        $table_agendamento->cliente_id = $id_cliente;
+        $table_agendamento->procedimento_id = 1;
         $table_agendamento->status = 0;
         $table_agendamento->final_time = null;
         $table_agendamento->return_date = null;
@@ -123,8 +109,9 @@ class AgendamentoController extends Controller
 
         $agendamento->data = $request->input('data');
         $agendamento->opening_hours = $request->input('opening_hours');
-        $agendamento->procedimento_id = $request->input('procedimento_id');
-
+        $procedimentosSelecionados = $request->input('procedimento_key');
+        $procedimentosIds = implode(',', $procedimentosSelecionados);
+        $agendamento->procedimento_key = $procedimentosIds;
         $agendamento->save();
 
         return redirect()->route('agendamento')->with('success', 'Agendamento atualizado com sucesso.');
@@ -136,16 +123,16 @@ class AgendamentoController extends Controller
         $dataRetur = 15;
         $response = Http::get('http://worldtimeapi.org/api/timezone/America/Sao_Paulo');
         $data = $response->json();
-        
+
         if ($data['datetime']) {
             $horaAtual = Carbon::parse($data['datetime']);
-            $horaAtual->format('H:i');   
-        }   
-        
+            $horaAtual->format('H:i');
+        }
+
         $dataInicial = Carbon::parse($agendamento->data);
         $dataFinal = $dataInicial->addDays($dataRetur);
-        
-        $agendamento->start_time = $horaAtual->format('H:i'); 
+
+        $agendamento->start_time = $horaAtual->format('H:i');
         $agendamento->status = true;
         $agendamento->return_date = $dataFinal->toDateString();
 
@@ -158,18 +145,14 @@ class AgendamentoController extends Controller
         $agendamento = Agendamento::find($id);
         $response = Http::get('http://worldtimeapi.org/api/timezone/America/Sao_Paulo');
         $data = $response->json();
-        
-        
+
         $horaAtual = Carbon::parse($data['datetime']);
-        $horaAtual->format('H:i'); 
-      
-       
-        
-       // $horaAtual = Carbon::parse($agendamento->data);
-        $agendamento->final_time = $horaAtual->format('H:i');         
+        $horaAtual->format('H:i');
+
+        $agendamento->final_time = $horaAtual->format('H:i');
         $agendamento->status = false;
         $agendamento->save();
-       
+
         return redirect()->route('agendamento')->with('success', 'Agendamento atualizado com sucesso.');
     }
 
@@ -180,9 +163,9 @@ class AgendamentoController extends Controller
             Agendamento::find($id)->delete();
             return redirect()->back()->with('success', 'Informações registradas com sucesso!');
         }
-        
+
         return redirect()->back()->with('success', 'Informações registradas com sucesso!');
-    
+
     }
 
 
