@@ -66,7 +66,7 @@
                     <input type="text" name='preco' class="form-control" id="valor" id="exampleInputUsername1" onkeyup="moeda()" placeholder="R$ 0.00">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Salvar </button>
+                    <button type="submit" class="btn btn-primary">Salvar </button>
                 </div>
             </form>
         </div>
