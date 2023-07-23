@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProcedimentoRequest;
 use App\Models\Procedimento;
-use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProcedimentoController extends Controller
 {
@@ -23,12 +23,13 @@ class ProcedimentoController extends Controller
     public function store(ProcedimentoRequest $request)
     {
         $dados = $request->validated();
-       
+
         $table = new Procedimento();
 
         $table->nome = $dados['nome'];
         $table->descricao = $dados['descricao'];
-        $table->preco = $dados['preco'];
+        $table->preco = $dados['preco'] = Str::replace(['.',',',''], '', $dados['preco']);
+
         $table->save();
         return redirect()->back()->with('success', 'Informações registradas com sucesso!');
 
