@@ -29,7 +29,7 @@ class ProcedimentoController extends Controller
         $table->nome = $dados['nome'];
         $table->descricao = $dados['descricao'];
         $table->preco = $dados['preco'] = Str::replace(['.',',',''], '', $dados['preco']);
-
+        $table->preco = $table->preco /100;
         $table->save();
         return redirect()->back()->with('success', 'Informações registradas com sucesso!');
 
