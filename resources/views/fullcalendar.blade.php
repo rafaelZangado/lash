@@ -188,7 +188,7 @@
         </div>
     </div>
 
-    <!--CRIAR AGENDAMENTO-->
+    <!--EIBIR AGENDAMENTO-->
     <div class="modal fade col-lg-12" id="modalCalendario" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog  modal-lg">
@@ -237,7 +237,6 @@
                             value="">
                             <i class="mdi mdi-cached"></i>
                         </button>
-
                     </div>
                 </div>
             </div>
@@ -275,11 +274,11 @@
                                     @foreach ($pro as $key => $idDiferente)
                                         <div class="col">
                                             <div class="form-check form-switch">
-                                                <p>{{ $idDiferente }}</p>
                                                 <input class="form-check-input" type="checkbox"
                                                     role="switch" name="procedimento_key[]"
                                                     value="{{ $key }}"
                                                     id="flexSwitchCheckChecked" {{ in_array($idDiferente, $diferentes) ? '' : 'checked' }} >
+                                                 {{ $idDiferente }}
                                             </div>
                                         </div>
                                     @endforeach
@@ -429,7 +428,8 @@
                     description = event.description;
 
                     document.getElementById("title").innerHTML = title;
-                    document.getElementById("contato").innerHTML = contato;
+                    document.getElementById("contato").innerHTML = contato = '(' + contato.substring(0, 2) + ') ' + contato.substring(2, 3) + ' ' + contato.substring(3, 7) + '-' + contato.substring(7);
+;
                     document.getElementById("total").innerHTML = 'Total R$ ' + total;
                     document.getElementById("buttonplay").value = id;
                     document.getElementById("buttoncancelatendimento").value = id;
@@ -490,7 +490,6 @@
                         };
 
                     });
-
                     // Atualize a propriedade 'events' do calendário com os eventos retornados
                     calendar.setOption('events', eventos);
                 },
