@@ -1,6 +1,9 @@
+
 @extends('dashboard') <!-- Agora agenda.blade.php estende dashboard.blade.php -->
 
 @section('agenda')
+<hr>
+<br>
     <script src="{{ asset('js/fullcalendar/index.global.js') }}"></script>
     <script src="{{ asset('js/fullcalendar/pt-br.global.js') }}"></script>
     <!-- Include a required theme -->
@@ -20,6 +23,10 @@
             border-left: 4px solid rgb(255, 30, 0)!important; /* Cor da borda para o primeiro elemento */
         }
 
+        .custom-border-canceladoadm {
+            border-left: 4px solid rgb(23, 22, 22)!important; /* Cor da borda para o primeiro elemento */
+        }
+
         .custom-border-agendado {
             border-left: 4px solid rgb(69, 183, 3)!important; /* Cor da borda para o segundo elemento */
         }
@@ -34,14 +41,22 @@
         .custom-border-confreturn {
             border-left: 4px solid rgb(255, 116, 16)!important; /* Cor da borda para o terceiro elemento */
         }
+        .custom-border-completo {
+            border-left: 4px solid rgb(115, 115, 114)!important; /* Cor da borda para o terceiro elemento */
+        }
     </style>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
            <div class="fc-external-events">
                 <div class="fc-event custom-border-cancelado">
-                    <p>Atendimento cancelado</p>
+                    <p>Cancelado pelo cliente</p>
                     <p class="small-text"></p>
-                    <p class="text-muted mb-0">cancelado</p>
+                    <p class="text-muted mb-0">Quando o cliente cancela o atendimento</p>
+                </div>
+                <div class="fc-event custom-border-canceladoadm">
+                    <p>Cancelado pelo administrador</p>
+                    <p class="small-text"></p>
+                    <p class="text-muted mb-0">Quando o admin cancela o atendimento</p>
                 </div>
                 <div class="fc-event custom-border-agendado">
                     <p>Atendimento agendado</p>
@@ -63,62 +78,15 @@
                     <p class="small-text"></p>
                     <p class="text-muted mb-0">Voce deve confirmar o retorno do atendimento</p>
                 </div>
-            </div>
-
-            <div class="card">
-                <div class="card-body">
-                    <center>
-                  <p class="card-title">
-                        🥳🎊🎉 Aniversariante do Mes 🥳🎊🎉
-                    </p>
-                </center>
-                  <div class="list-wrapper pt-4">
-                      <ul class="icon-data-list">
-                          <li>
-                              <div class="d-flex">
-                              <div>
-                                    <p class="text-info mb-1">Isabella Becker</p>
-                                    <p class="mb-0">Data 15/ Julho / 2023 (<b>HOJE</b>)</p>
-                                    <p class="text-muted mb-0">
-                                        <a href="#"> Desconto de 10% </a>
-                                    </p>
-                                    <label>Uma mensagem será enviada para esse cliente HOJE !!! </label>
-                              </div>
-                              </div>
-                          </li>
-
-                          <li>
-                              <div class="d-flex">
-                              <div>
-                                    <p class="text-info mb-1">Maria silvar</p>
-                                    <p class="mb-0">Data 16/ Julho / 2023 (<b>AMANHÃ</b>)</p>
-                                    <p class="text-muted mb-0">
-                                        <a href="#"> Desconto de 10% </a>
-                                    </p>
-                                    <label>Uma mensagem será enviada para esse cliente AMANHÃ !!! </label>
-                              </div>
-                              </div>
-                          </li>
-
-                          <li>
-                              <div class="d-flex">
-                              <div>
-                                    <p class="text-info mb-1">Julia Campos</p>
-                                    <p class="mb-0">Data 24/ Julho / 2023 </p>
-                                    <p class="text-muted mb-0">
-                                        <a href="#"> Desconto de 10% </a>
-                                    </p>
-                                    <label>Uma mensagem será enviada para esse cliente</label>
-                              </div>
-                              </div>
-                          </li>
-                      </ul>
-                  </div>
+                <div class="fc-event custom-border-completo">
+                    <p>Atendimento Completo</p>
+                    <p class="small-text"></p>
+                    <p class="text-muted mb-0">Quando o atendimento é realizado</p>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-8 grid-margin stretch-card">
+        <div class="col-md-9 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
                     <div id='calendar'></div>
@@ -126,7 +94,57 @@
             </div>
         </div>
     </div>
+    <div class="card">
+        <div class="card-body">
+            <center>
+            <p class="card-title">
+                🥳🎊🎉 Aniversariante do Mes 🥳🎊🎉
+            </p>
+        </center>
+            <div class="list-wrapper pt-5">
+                <ul class="icon-data-list">
+                    <li>
+                        <div class="d-flex">
+                            <div>
+                                <p class="text-info mb-1">Isabella Becker</p>
+                                <p class="mb-0">Data 15/ Julho / 2023 (<b>HOJE</b>)</p>
+                                <p class="text-muted mb-0">
+                                    <a href="#"> Desconto de 10% </a>
+                                </p>
+                                <label>Uma mensagem será enviada para esse cliente HOJE !!! </label>
+                            </div>
+                        </div>
+                    </li>
 
+                    <li>
+                        <div class="d-flex">
+                        <div>
+                            <p class="text-info mb-1">Maria silvar</p>
+                            <p class="mb-0">Data 16/ Julho / 2023 (<b>AMANHÃ</b>)</p>
+                            <p class="text-muted mb-0">
+                                <a href="#"> Desconto de 10% </a>
+                            </p>
+                            <label>Uma mensagem será enviada para esse cliente AMANHÃ !!! </label>
+                        </div>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div class="d-flex">
+                        <div>
+                            <p class="text-info mb-1">Julia Campos</p>
+                            <p class="mb-0">Data 24/ Julho / 2023 </p>
+                            <p class="text-muted mb-0">
+                                <a href="#"> Desconto de 10% </a>
+                            </p>
+                            <label>Uma mensagem será enviada para esse cliente</label>
+                        </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <!--CRIAR AGENDAMENTO-->
     <div class="modal fade col-lg-12" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -390,15 +408,27 @@
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 locale: 'pt-br',
                 height: 'auto',
-                dateClick: function(info) {
-                    // Acionar o data no input do modal
-                    selectedDate = info.date;
-                    formattedDate = selectedDate.toISOString().slice(0, 10);
+                date: '2023-07-27',
 
-                    document.getElementById('modal-date-input').value = formattedDate;
-                    var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
-                    modal.show();
+                // Acionar o data no input do modal
+                dateClick: function(info) {
+                    var selectedDate = info.date;
+                    selectedDate.setHours(0, 0, 0, 0); // Definir hora, minuto, segundo e milissegundo para zero
+                    var today = new Date();
+                    today.setHours(0, 0, 0, 0); // Definir hora, minuto, segundo e milissegundo para zero
+
+                    // Verificar se a data selecionada é maior ou igual à data atual
+                    if (selectedDate >= today) {
+                        var formattedDate = selectedDate.toISOString().slice(0, 10);
+                        document.getElementById('modal-date-input').value = formattedDate;
+                        var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+                        modal.show();
+                    } else {
+                        // Se a data selecionada for anterior à data atual, não fazer nada
+                        // Você também pode mostrar uma mensagem de erro ou feedback ao usuário, se desejar
+                    }
                 },
+
                 expandRows: true,
                 slotMinTime: '08:00',
                 slotMaxTime: '21:00',
@@ -407,6 +437,7 @@
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
                 },
+
                 initialView: 'dayGridMonth',
                 initialDate:  new Date(),
 
@@ -429,7 +460,6 @@
 
                     document.getElementById("title").innerHTML = title;
                     document.getElementById("contato").innerHTML = contato = '(' + contato.substring(0, 2) + ') ' + contato.substring(2, 3) + ' ' + contato.substring(3, 7) + '-' + contato.substring(7);
-;
                     document.getElementById("total").innerHTML = 'Total R$ ' + total;
                     document.getElementById("buttonplay").value = id;
                     document.getElementById("buttoncancelatendimento").value = id;
@@ -460,7 +490,9 @@
                 selectable: true,
                 nowIndicator: true,
                 dayMaxEvents: true, // allow "more" link when too many events
-                events: []
+                events: [],
+
+
             });
 
             calendar.render();
@@ -477,10 +509,10 @@
                 method: 'GET',
                 success: function(response) {
                     var eventos = response.map(function(evento) {
-
                         return {
                             id: evento.id,
                             title: evento.title,
+                            date: evento.date,
                             start: evento.start,
                             end: evento.end,
                             color: evento.color,
@@ -488,8 +520,8 @@
                             procedimentos: evento.procedimentos,
                             total: evento.total,
                         };
-
                     });
+                    console.log(eventos)
                     // Atualize a propriedade 'events' do calendário com os eventos retornados
                     calendar.setOption('events', eventos);
                 },
@@ -497,6 +529,8 @@
                     console.log('Ocorreu um erro ao obter os eventos.');
                 }
             });
+
+
 
         });
     </script>
