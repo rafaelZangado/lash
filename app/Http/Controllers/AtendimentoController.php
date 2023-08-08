@@ -20,7 +20,7 @@ class AtendimentoController extends Controller
 
         $id = Agendamento::pluck('procedimento_key', 'id')->all();
         $procedimentosPorId = [];
-        $procedimentos->pluck('nome')->toArray();
+        $procedimentos->pluck('nome', 'preco')->toArray();
 
         foreach ($id as $agendamentoId => $procedimentoKey) {
             $procedimentoIds = explode(',', $procedimentoKey);
@@ -28,7 +28,8 @@ class AtendimentoController extends Controller
             $procedimentosPorId[$agendamentoId] = $nomesProcedimentos;
         }
         $pro = $procedimentos->pluck('nome', 'id')->all();
-
+        $pro2 = $procedimentos->pluck('id', 'preco')->all();
+        dd($id);
         return view('/fullcalendar',
         [
             'procedimentos' =>  $procedimentos,
@@ -36,6 +37,7 @@ class AtendimentoController extends Controller
             'agendamentos' => $agendamentos,
             'procedimentosPorId' => $procedimentosPorId,
             'pro' => $pro,
+            'pro2' => $pro2,
         ]);
 
     }
@@ -131,5 +133,10 @@ class AtendimentoController extends Controller
         if ($id) {
             Agendamento::find($id)->delete();
         }
+    }
+
+    public function checkout(Request $request)
+    {
+        dd( $request->all());
     }
 }

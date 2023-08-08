@@ -238,9 +238,18 @@
                         </tbody>
                     </table>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-rounded btn-icon-text" id="buttonplay"
+                        {{-- <button type="button" class="btn btn-primary btn-rounded btn-icon-text" id="buttonplay"
                                 value="">
                                 <i class="mdi mdi-play-circle-outline"></i>
+                        </button> --}}
+
+                        <button type="button"
+                        class="btn btn-primary btn-rounded btn-icon-text"
+                        data-bs-toggle="modal"
+                        data-bs-target="#checkout"
+                        id="buttonecheckout"
+                        value="">
+                            <i class="mdi mdi-play-circle-outline"></i>
                         </button>
 
                         <button type="button" class="btn btn-danger btn-icon-text" id="buttoncancelatendimento"
@@ -311,6 +320,69 @@
             </div>
         </div>
     @endforeach
+    <!--CHECKOUT-->
+    @foreach ($agendamentos as $agendamento)
+       <!-- Modal -->
+        <div class="modal fade col-lg-12" id="checkout-{{$agendamento->id}}" id="modalCalendario"tabindex="-1" aria-labelledby="checkoutModal" aria-hidden="true">
+            <div class="modal-dialog modal-lg"  >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="card-title"> Finalizar Cehckgout do Atendimento | {{$agendamento->cliente->nome}}  </h4>
+                    </div>
+                   <h3> R$: <div id="valorTotal"></div></h3>
+                    <div class="modal-body">
+
+                        <form method="POST" action="{{ route('agendamento-checkout', $agendamento->id) }}">
+                            @csrf
+                            @method('PUT')
+                            <div class="row">
+                                <div class="col">
+                                    <select id="mySelect" name="cliente_id" class="form-control">
+                                        <option value="pix">
+                                            Pix
+                                        </option>
+                                        <option value="cred_card">
+                                            Cartão de credito
+                                        </option>
+                                        <option value="maney">
+                                            Dinheiro
+                                        </option>
+                                        <option value="parceiro">
+                                            Parceria / Modelo / Treinamento
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="form-group container text-center">
+                                <div class="row row-cols-3">
+                                    <!-- Ativos -->
+                                    @php
+                                        $diferentes = array_diff($pro, $procedimentosPorId[$agendamento->id]);
+                                    @endphp
+                                    @foreach ($pro as $key => $idDiferente)
+                                        <div class="col">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox"
+                                                    role="switch" name="procedimento_key[]"
+                                                    value="{{ $key }}"
+                                                    id="flexSwitchCheckChecked" {{ in_array($idDiferente, $diferentes) ? '' : 'checked' }} >
+                                                {{ $idDiferente }}
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit"  id="buttonplay"
+                                class="btn btn-success btn-rounded btn-fw">Salvar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 
     <script>
         document.getElementById('cpf').addEventListener('input', function(e) {
@@ -327,6 +399,7 @@
 
             e.target.value = value;
         });
+
         document.getElementById('buttonplay').addEventListener('click', function() {
 
 			valorBotao = this.value;
@@ -403,6 +476,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
+
             var calendarEl = document.getElementById('calendar');
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -464,10 +538,15 @@
                     document.getElementById("buttonplay").value = id;
                     document.getElementById("buttoncancelatendimento").value = id;
 
+                    //Editar
                     button = document.getElementById("buttonedite");
                     button.setAttribute("data-bs-target", "#editar-" + id);
-
                     modal = document.getElementById("editar");
+
+                    //checkout
+                    button = document.getElementById("buttonecheckout");
+                    button.setAttribute("data-bs-target", "#checkout-" + id);
+                    modal = document.getElementById("checkout");
 
                     procedimentosContainer = document.getElementById("procedimentos");
                     procedimentosContainer.innerHTML = '';
@@ -483,6 +562,7 @@
                     });
 
                     modal.setAttribute("id", "editar-" + id);
+                    modal.setAttribute("id", "checkout-" + id);
                 },
 
                 navLinks: true, // can click day/week names to navigate views
@@ -504,6 +584,11 @@
                 modal.show();
             });
 
+            document.getElementById('buttonecheckout').addEventListener('click', function() {
+                
+                document.getElementById("valorTotal").innerHTML = 'MSG'+total;
+            });
+
             $.ajax({
                 url: '/eventos',
                 method: 'GET',
@@ -521,7 +606,7 @@
                             total: evento.total,
                         };
                     });
-                    console.log(eventos)
+                    console.log('Ok eu existo',eventos);
                     // Atualize a propriedade 'events' do calendário com os eventos retornados
                     calendar.setOption('events', eventos);
                 },
@@ -529,10 +614,9 @@
                     console.log('Ocorreu um erro ao obter os eventos.');
                 }
             });
-
-
-
         });
+
+
     </script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
