@@ -1,4 +1,6 @@
 //Mascara para CPF
+document.addEventListener('DOMContentLoaded', function() {
+
     document.getElementById('cpf').addEventListener('input', function(e) {
         let value = e.target.value.replace(/\D/g, '');
         const length = value.length;
@@ -13,6 +15,7 @@
 
         e.target.value = value;
     });
+});
 
 //Mascara para Fone
     function mask(o, f) {
