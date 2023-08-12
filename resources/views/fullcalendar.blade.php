@@ -7,7 +7,7 @@
     <script src="{{ asset('js/fullcalendar/index.global.js') }}"></script>
     <script src="{{ asset('js/fullcalendar/pt-br.global.js') }}"></script>
     <!-- Include a required theme -->
-    <script src="sweetalert2.all.min.js"></script>
+    {{-- <script src="sweetalert2.all.min.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
@@ -232,11 +232,37 @@
                                     <div id="procedimentos"></div>
                                 </td>
                                 <td>
-                                    <div id="total"></div>
+                                   <h4>R$:</h4> <h4><b><div id="total"></div></b></h4>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <div class="row">
+                        <div class="col">
+                            <select id="mySelect" name="cliente_id" class="form-control">
+                                <option value="pix">
+                                    Pix
+                                </option>
+                                <option value="cred_card">
+                                    Cartão de credito
+                                </option>
+                                <option value="maney">
+                                    Dinheiro
+                                </option>
+                                <option value="parceiro">
+                                    Parceria / Modelo / Treinamento
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="container text-center">
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
+                            <div class="col">
+                                <div id='aaa'></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="modal-footer">
                         {{-- <button type="button" class="btn btn-primary btn-rounded btn-icon-text" id="buttonplay"
                                 value="">
@@ -249,7 +275,7 @@
                         data-bs-target="#checkout"
                         id="buttonecheckout"
                         value="">
-                            <i class="mdi mdi-play-circle-outline"></i>
+                            <i class="mdi mdi-play-circle-outline">check in</i>
                         </button>
 
                         <button type="button" class="btn btn-danger btn-icon-text" id="buttoncancelatendimento"
@@ -385,6 +411,7 @@
     @endforeach
 
     <script>
+
         document.getElementById('cpf').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             const length = value.length;
@@ -433,7 +460,6 @@
                 }
             })
         });
-
 
         document.getElementById('buttoncancelatendimento').addEventListener('click', function() {
 			valorBotao = this.value;
@@ -517,7 +543,6 @@
 
                 eventClick: function(arg) {
 
-                    // Exibir o modal
                     var modal = new bootstrap.Modal(document.getElementById('modalCalendario'));
                     modal.show();
 
@@ -532,11 +557,26 @@
                     end = event.end;
                     description = event.description;
 
+
+                    teste().then(function(procedimentosall) {
+                        var nomes = procedimentosall.map(function(procedimento) {
+                            return procedimento.nome;
+                        }).join(', '); // Unindo os nomes com vírgulas e espaços
+
+                        document.getElementById('aaa').innerHTML = nomes;
+                    })
+                    valores = [];
+                    for ( key in procedimentos) {
+                        const v = procedimentos[key];
+                        valores.push(v);
+                    }
+
                     document.getElementById("title").innerHTML = title;
                     document.getElementById("contato").innerHTML = contato = '(' + contato.substring(0, 2) + ') ' + contato.substring(2, 3) + ' ' + contato.substring(3, 7) + '-' + contato.substring(7);
-                    document.getElementById("total").innerHTML = 'Total R$ ' + total;
+                    document.getElementById("total").innerHTML = total;
                     document.getElementById("buttonplay").value = id;
                     document.getElementById("buttoncancelatendimento").value = id;
+                    document.getElementById("procedimentos").innerHTML = valores.join("<hr> ");
 
                     //Editar
                     button = document.getElementById("buttonedite");
@@ -548,30 +588,15 @@
                     button.setAttribute("data-bs-target", "#checkout-" + id);
                     modal = document.getElementById("checkout");
 
-                    procedimentosContainer = document.getElementById("procedimentos");
-                    procedimentosContainer.innerHTML = '';
-
-                    procedimentos.forEach(function(procedimento) {
-                        var ul = document.createElement("ul");
-                        ul.classList.add("list-group", "list-group-flush");
-                        var li = document.createElement("li");
-                        li.classList.add("list-group-item");
-                        li.innerHTML = procedimento;
-                        ul.appendChild(li);
-                        procedimentosContainer.appendChild(ul);
-                    });
-
                     modal.setAttribute("id", "editar-" + id);
                     modal.setAttribute("id", "checkout-" + id);
                 },
 
-                navLinks: true, // can click day/week names to navigate views
+                navLinks: true,
                 editable: true,
                 selectable: true,
                 nowIndicator: true,
-                dayMaxEvents: true, // allow "more" link when too many events
-                events: [],
-
+                dayMaxEvents: true,
 
             });
 
@@ -582,11 +607,6 @@
                 // Acionar o modal
                 var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
                 modal.show();
-            });
-
-            document.getElementById('buttonecheckout').addEventListener('click', function() {
-                
-                document.getElementById("valorTotal").innerHTML = 'MSG'+total;
             });
 
             $.ajax({
@@ -606,14 +626,36 @@
                             total: evento.total,
                         };
                     });
-                    console.log('Ok eu existo',eventos);
-                    // Atualize a propriedade 'events' do calendário com os eventos retornados
                     calendar.setOption('events', eventos);
                 },
                 error: function() {
                     console.log('Ocorreu um erro ao obter os eventos.');
                 }
             });
+
+            function teste() {
+                return new Promise(function(resolve, reject) {
+                    $.ajax({
+                        url: '/teste',
+                        method: 'GET',
+                        success: function(response) {
+                            var procedimentosall = response.map(function(pro) {
+                                return {
+                                    id: pro.id,
+                                    nome: pro.nome,
+                                    descricao: pro.descricao,
+                                    preco: pro.preco,
+                                };
+                            });
+                            resolve(procedimentosall);
+                        },
+                        error: function(error) {
+                            reject(error);
+                        },
+                    });
+                });
+            }
+
         });
 
 
