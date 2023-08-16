@@ -4,7 +4,6 @@ use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\AtendimentoController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\FullCalendarController;
 use App\Http\Controllers\ProcedimentoController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +23,7 @@ use Illuminate\Support\Facades\Route;
    // Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/teste', [DashboardController::class, 'teste'])->name('teste');
     Route::get('/eventos', [DashboardController::class, 'eventos'])->name('eventos');
+    Route::get('/checkin/{id}/checkin', [DashboardController::class, 'checkin'])->name('checkin');
 
 //Rota clientes
     Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes');
