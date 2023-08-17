@@ -2,6 +2,7 @@
 @section('title', 'Meus Clientes')
 @section('tela')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card">
@@ -26,7 +27,7 @@
                                     role="switch" name="procedimento_key[]"
                                     value="{{ $key }}"
                                     id="procedimento_key" {{ in_array($idDiferente, $diferentes) ? '' : 'checked' }} onclick="calculo(this)">
-                                {{ $idDiferente }}
+                                {{ $idDiferente }} { {{$key}}}
                             </div>
                         </div>
                     @endforeach
@@ -64,8 +65,11 @@
 </div>
 
 <script>
-    function calculo(e) {
-        itens = []
+    var itens = []; // Declaração global
+    var total = [];
+    totalSum = 0;
+    function calculo(e, itens) {
+        itens = this.itens
         key = e.value;
 
         var checkboxes = document.querySelectorAll('#procedimento_key:checked');
@@ -78,20 +82,21 @@
             url: '/teste',
             method: 'GET',
             success: function(response) {
-                var procedimentosall = response.map(function(pro) {
-                    return {
-                        total: pro.total,
-                    };
+                var procedimentosall = response.filter(function(pro) {
+                    return itens.includes(pro.id.toString());
                 });
-                resolve(procedimentosall);
+                procedimentosall.forEach(function(procedimento) {
+                    v = parseFloat(procedimento.preco)
+                    totalSum += v;
+                });
+                document.getElementById('tela').innerHTML = totalSum;
+                console.log(totalSum)
+
             },
             error: function(error) {
                 reject(error);
             },
         });
-
-        document.getElementById('tela').innerHTML = 100
-
     }
 
     document.getElementById('buttonplay').addEventListener('click', function() {
