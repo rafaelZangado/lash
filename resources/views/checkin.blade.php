@@ -3,6 +3,7 @@
 @section('tela')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card">
@@ -16,9 +17,9 @@
                 <div class="row row-cols-3">
                     <!-- Ativos -->
                     @php
-                    $diferentes = array_diff($pro, $procedimentosPorId[$checkin->id]);
+                        $diferentes = array_diff($pro, $procedimentosPorId[$checkin->id]);
                     // dd($diferentes, $pro,  $procedimentosPorId[$checkin->id])
-                @endphp
+                    @endphp
 
                     @foreach ($pro as $key => $idDiferente)
                         <div class="col">
@@ -65,38 +66,43 @@
 </div>
 
 <script>
-    var itens = []; // Declaração global
-    var total = [];
-    totalSum = 0;
-    function calculo(e, itens) {
-        itens = this.itens
-        key = e.value;
+    var itens = [];
+    var procedimentosall = [];
+    function calculo(e) {
 
-        var checkboxes = document.querySelectorAll('#procedimento_key:checked');
-
-        checkboxes.forEach(function(checkbox) {
-            itens.push(checkbox.value);
-        });
 
         $.ajax({
             url: '/teste',
             method: 'GET',
             success: function(response) {
-                var procedimentosall = response.filter(function(pro) {
-                    return itens.includes(pro.id.toString());
-                });
-                procedimentosall.forEach(function(procedimento) {
-                    v = parseFloat(procedimento.preco)
-                    totalSum += v;
-                });
-                document.getElementById('tela').innerHTML = totalSum;
-                console.log(totalSum)
 
+                var checkboxes = document.querySelectorAll('#procedimento_key:checked');
+
+                checkboxes.forEach(function(checkbox) {
+                    itens.push(checkbox.value);
+                });
+
+                var filteredResponse = response.filter(function(item) {
+                    return itens.includes(item.id.toString());
+                });
+                console.log('>>>',filteredResponse)
+
+                var totalSum = 0;
+                filteredResponse.forEach(function(item) {
+                    var preco = parseFloat(item.preco);
+                    totalSum += preco;
+                });
+
+                document.getElementById('tela').innerHTML = totalSum.toFixed(2);
             },
             error: function(error) {
                 reject(error);
             },
         });
+
+        if(itens){
+            itens = [];
+        }
     }
 
     document.getElementById('buttonplay').addEventListener('click', function() {
