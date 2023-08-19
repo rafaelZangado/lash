@@ -18,9 +18,7 @@
                     <!-- Ativos -->
                     @php
                         $diferentes = array_diff($pro, $procedimentosPorId[$checkin->id]);
-                    // dd($diferentes, $pro,  $procedimentosPorId[$checkin->id])
                     @endphp
-
                     @foreach ($pro as $key => $idDiferente)
                         <div class="col">
                             <div class="form-check form-switch">
@@ -28,7 +26,7 @@
                                     role="switch" name="procedimento_key[]"
                                     value="{{ $key }}"
                                     id="procedimento_key" {{ in_array($idDiferente, $diferentes) ? '' : 'checked' }} onclick="calculo(this)">
-                                {{ $idDiferente }} { {{$key}}}
+                                    {{ $idDiferente }}
                             </div>
                         </div>
                     @endforeach
@@ -37,7 +35,7 @@
             <div class="row">
                 <div class="col">
                     <h3>Tipo de pagamento </h3>
-                    <select id="mySelect" name="cliente_id" class="form-control">
+                    <select id="paymente" name="paymente" class="form-control">
                         <option value="pix">
                             Pix
                         </option>
@@ -69,15 +67,11 @@
     var itens = [];
     var procedimentosall = [];
     function calculo(e) {
-
-
         $.ajax({
             url: '/teste',
             method: 'GET',
             success: function(response) {
-
                 var checkboxes = document.querySelectorAll('#procedimento_key:checked');
-
                 checkboxes.forEach(function(checkbox) {
                     itens.push(checkbox.value);
                 });
@@ -85,7 +79,6 @@
                 var filteredResponse = response.filter(function(item) {
                     return itens.includes(item.id.toString());
                 });
-                console.log('>>>',filteredResponse)
 
                 var totalSum = 0;
                 filteredResponse.forEach(function(item) {
@@ -130,10 +123,37 @@
                     'procedimento iniciado com sucesso.',
                     'success'
                 )
-                // $.ajax({
-                //     url: '/start/' + valorBotao + '/start',
-                //     method: 'GET',
-                // });
+                var procedimento_key =[]
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                var clienteId = {{ $checkin->cliente->id }};
+                var checkboxes = document.querySelectorAll('#procedimento_key:checked');
+                var paymente = document.getElementById('paymente').value;
+
+                a = checkboxes.forEach(function(checkbox) {
+                    procedimento_key.push(checkbox.value);
+                });
+
+                data = {
+                    _token: csrfToken,
+                    id: clienteId,
+                    procedimento_key: procedimento_key,
+                    paymente: paymente
+                };
+
+                $.ajax({
+                    url: '/up',
+                    method: 'put',
+                    data:data,
+                    success: function(response) {
+                        itens = []
+                        console.log(response);
+                    },
+                    error: function(error) {
+                        //console.error(error);
+                    },
+                });
+                pp = []
+
             }
         })
     });
