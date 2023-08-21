@@ -47,8 +47,8 @@ use Illuminate\Support\Facades\Route;
 //Atendimento
     Route::get('/', [AtendimentoController::class, 'index'])->name('atendimento');
     Route::get('/start/{id}/start', [AtendimentoController::class, 'start'])->name('start');
+    Route::put('/up', [AtendimentoController::class, 'up'])->name('up');
     Route::get('/delete/{id}/delete', [AtendimentoController::class, 'delete'])->name('delete');
     Route::get('/cancel/{id}/cancel', [AtendimentoController::class, 'cancel'])->name('cancel');
     Route::post('/atendimento/store', [AtendimentoController::class, 'store'])->name('atendimentosave');
     Route::put('/agendamento/{id}/checkout', [AtendimentoController::class, 'checkout'])->name('agendamento-checkout');
-
