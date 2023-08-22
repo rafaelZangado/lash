@@ -20,7 +20,7 @@ class DashboardController extends Controller
             $procedimentoIds = explode(',', $agendamento->procedimento_key);
             $procedimentoIds = array_map('trim', $procedimentoIds);
             $procedimentos = Procedimento::whereIn('id', $procedimentoIds)->get();
-            $procedimentoNomes = $procedimentos->pluck('nome')->toArray();
+            $procedimentoNomes = $procedimentos->pluck('nome', 'id')->toArray();
             $total = $procedimentos->sum('preco');
             $data = $agendamento->data;
             if($agendamento->status == 'rescheduled'){
@@ -51,13 +51,53 @@ class DashboardController extends Controller
         return view('/dashboard');
     }
 
-    public function teste(){
+    public function teste()
+    {
 
-        $agendamento = Agendamento::all();
-        $agendamento =  json_encode($agendamento);
+        $procedimentosall = Procedimento::all();
+        return response()->json($procedimentosall);
 
-        return view('/elementoTeste', [
-           'agendamento' => $agendamento
+    }
+
+    public function checkin($id){
+        $checkin = Agendamento::with('procedimento', 'cliente')->find($id);
+
+        $id = Agendamento::pluck('procedimento_key', 'id')->all();
+        $procedimentos = Procedimento::all();
+        $pro = $procedimentos->pluck('nome', 'id')->all();
+
+        $procedimentosPorId = [];
+        foreach ($id as $agendamentoId => $procedimentoKey) {
+            $procedimentoIds = explode(',', $procedimentoKey);
+            $nomesProcedimentos = $procedimentos->whereIn('id', $procedimentoIds)->pluck('nome')->all();
+            $procedimentosPorId[$agendamentoId] = $nomesProcedimentos;
+        }
+
+
+
+        $keyproce = explode(',',$checkin->procedimento_key);
+        $proce = Procedimento::find($keyproce);
+        $proceInfo = $proce->map(function ($procedimento){
+            return [
+                'nome' => $procedimento->nome,
+                'preco' => $procedimento->preco,
+            ];
+        });
+        $total = $proceInfo->sum('preco');
+
+
+        $return = [
+            $checkin,
+            $proceInfo->all(),
+            $proce,
+            $checkin->cliente->nome
+        ];
+        return view('/checkin', [
+            'checkin' => $checkin,
+            'procedimentosPorId' => $procedimentosPorId,
+            'pro' => $pro,
+            'return' => $return,
+            'total' => $total
         ]);
     }
 
