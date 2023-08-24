@@ -237,45 +237,22 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="row">
-                        <div class="col">
-                            <select id="mySelect" name="cliente_id" class="form-control">
-                                <option value="pix">
-                                    Pix
-                                </option>
-                                <option value="cred_card">
-                                    Cartão de credito
-                                </option>
-                                <option value="maney">
-                                    Dinheiro
-                                </option>
-                                <option value="parceiro">
-                                    Parceria / Modelo / Treinamento
-                                </option>
-                            </select>
-                        </div>
-                    </div>
+
                     <div class="container text-center">
                         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
                             <div class="col">
-                                <div id='aaa'></div>
+                                {{-- <div id='aaa'></div> --}}
                             </div>
                         </div>
                     </div>
 
                     <div class="modal-footer">
-                        {{-- <button type="button" class="btn btn-primary btn-rounded btn-icon-text" id="buttonplay"
-                                value="">
-                                <i class="mdi mdi-play-circle-outline"></i>
-                        </button> --}}
 
                         <button type="button"
                         class="btn btn-primary btn-rounded btn-icon-text"
-                        data-bs-toggle="modal"
-                        data-bs-target="#checkout"
-                        id="buttonecheckout"
+                        id="checkout"
                         value="">
-                            <i class="mdi mdi-play-circle-outline">check in</i>
+                        <i>check in</i>
                         </button>
 
                         <button type="button" class="btn btn-danger btn-icon-text" id="buttoncancelatendimento"
@@ -346,69 +323,7 @@
             </div>
         </div>
     @endforeach
-    <!--CHECKOUT-->
-    @foreach ($agendamentos as $agendamento)
-       <!-- Modal -->
-        <div class="modal fade col-lg-12" id="checkout-{{$agendamento->id}}" id="modalCalendario"tabindex="-1" aria-labelledby="checkoutModal" aria-hidden="true">
-            <div class="modal-dialog modal-lg"  >
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="card-title"> Finalizar Cehckgout do Atendimento | {{$agendamento->cliente->nome}}  </h4>
-                    </div>
-                   <h3> R$: <div id="valorTotal"></div></h3>
-                    <div class="modal-body">
 
-                        <form method="POST" action="{{ route('agendamento-checkout', $agendamento->id) }}">
-                            @csrf
-                            @method('PUT')
-                            <div class="row">
-                                <div class="col">
-                                    <select id="mySelect" name="cliente_id" class="form-control">
-                                        <option value="pix">
-                                            Pix
-                                        </option>
-                                        <option value="cred_card">
-                                            Cartão de credito
-                                        </option>
-                                        <option value="maney">
-                                            Dinheiro
-                                        </option>
-                                        <option value="parceiro">
-                                            Parceria / Modelo / Treinamento
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="form-group container text-center">
-                                <div class="row row-cols-3">
-                                    <!-- Ativos -->
-                                    @php
-                                        $diferentes = array_diff($pro, $procedimentosPorId[$agendamento->id]);
-                                    @endphp
-                                    @foreach ($pro as $key => $idDiferente)
-                                        <div class="col">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox"
-                                                    role="switch" name="procedimento_key[]"
-                                                    value="{{ $key }}"
-                                                    id="flexSwitchCheckChecked" {{ in_array($idDiferente, $diferentes) ? '' : 'checked' }} >
-                                                {{ $idDiferente }}
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit"  id="buttonplay"
-                                class="btn btn-success btn-rounded btn-fw">Salvar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endforeach
 
     <script>
 
@@ -427,37 +342,15 @@
             e.target.value = value;
         });
 
-        document.getElementById('buttonplay').addEventListener('click', function() {
 
-			valorBotao = this.value;
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
+        document.getElementById('checkout').addEventListener('click', function(){
+            id = this.value;
+            $.ajax({
+                url: 'checkin/'+id+'/checkin',
+                method: 'GET',
+                success: function(response) {
+                    window.location.href = 'checkin/'+id+'/checkin'
                 },
-                buttonsStyling: false
-            })
-
-            swalWithBootstrapButtons.fire({
-                icon: 'question',
-                title: 'Iniciar Atendimento',
-                text: 'Você deseja realmente iniciar o atendimento ?°',
-                showCancelButton: true,
-                confirmButtonText: 'Sim',
-                cancelButtonText: 'Não',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    swalWithBootstrapButtons.fire(
-                        'Iniciando atendimento',
-                        'procedimento iniciado com sucesso.',
-                        'success'
-                    )
-                    $.ajax({
-                        url: '/start/' + valorBotao + '/start',
-                        method: 'GET',
-                    });
-                }
             })
         });
 
@@ -557,14 +450,6 @@
                     end = event.end;
                     description = event.description;
 
-
-                    teste().then(function(procedimentosall) {
-                        var nomes = procedimentosall.map(function(procedimento) {
-                            return procedimento.nome;
-                        }).join(', '); // Unindo os nomes com vírgulas e espaços
-
-                        document.getElementById('aaa').innerHTML = nomes;
-                    })
                     valores = [];
                     for ( key in procedimentos) {
                         const v = procedimentos[key];
@@ -574,22 +459,15 @@
                     document.getElementById("title").innerHTML = title;
                     document.getElementById("contato").innerHTML = contato = '(' + contato.substring(0, 2) + ') ' + contato.substring(2, 3) + ' ' + contato.substring(3, 7) + '-' + contato.substring(7);
                     document.getElementById("total").innerHTML = total;
-                    document.getElementById("buttonplay").value = id;
                     document.getElementById("buttoncancelatendimento").value = id;
+                    document.getElementById("checkout").value = id;
                     document.getElementById("procedimentos").innerHTML = valores.join("<hr> ");
 
                     //Editar
                     button = document.getElementById("buttonedite");
                     button.setAttribute("data-bs-target", "#editar-" + id);
                     modal = document.getElementById("editar");
-
-                    //checkout
-                    button = document.getElementById("buttonecheckout");
-                    button.setAttribute("data-bs-target", "#checkout-" + id);
-                    modal = document.getElementById("checkout");
-
                     modal.setAttribute("id", "editar-" + id);
-                    modal.setAttribute("id", "checkout-" + id);
                 },
 
                 navLinks: true,
@@ -632,30 +510,6 @@
                     console.log('Ocorreu um erro ao obter os eventos.');
                 }
             });
-
-            function teste() {
-                return new Promise(function(resolve, reject) {
-                    $.ajax({
-                        url: '/teste',
-                        method: 'GET',
-                        success: function(response) {
-                            var procedimentosall = response.map(function(pro) {
-                                return {
-                                    id: pro.id,
-                                    nome: pro.nome,
-                                    descricao: pro.descricao,
-                                    preco: pro.preco,
-                                };
-                            });
-                            resolve(procedimentosall);
-                        },
-                        error: function(error) {
-                            reject(error);
-                        },
-                    });
-                });
-            }
-
         });
 
 
