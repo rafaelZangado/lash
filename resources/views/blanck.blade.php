@@ -13,11 +13,11 @@
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
             <a class="navbar-brand brand-logo mr-5">
               {{-- MINHA LOGO --}}
-              <img src="images/logo.svg" class="mr-2" alt="logo" />
+              <img src="img/logo.jpg" class="mr-2" alt="logo" />
             </a>
             <a class="navbar-brand brand-logo-mini" >
               {{-- MINHA OUTRA LOGO --}}
-              <img src="images/logo-mini.svg" alt="logo" /></a>
+              <img src="img/logo.jpg" alt="logo" /></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         {{-- <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
