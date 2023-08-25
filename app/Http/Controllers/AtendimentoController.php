@@ -28,8 +28,7 @@ class AtendimentoController extends Controller
             $procedimentosPorId[$agendamentoId] = $nomesProcedimentos;
         }
         $pro = $procedimentos->pluck('nome', 'id')->all();
-        $pro2 = $procedimentos->pluck('id', 'preco')->all();
-        dd($id);
+
         return view('/fullcalendar',
         [
             'procedimentos' =>  $procedimentos,
@@ -37,7 +36,6 @@ class AtendimentoController extends Controller
             'agendamentos' => $agendamentos,
             'procedimentosPorId' => $procedimentosPorId,
             'pro' => $pro,
-            'pro2' => $pro2,
         ]);
 
     }
@@ -62,6 +60,19 @@ class AtendimentoController extends Controller
         $agendamento->status = 'rescheduled';
         $agendamento->return_date = $dataFinal->toDateString();
 
+        $agendamento->save();
+
+    }
+
+    public function up(Request $request)
+    {
+        $agendamento = Agendamento::find($request->id);
+
+        $agendamento->status = 'completo';
+        $agendamento->payment = $request->input('payment');
+        $procedimentosSelecionados = $request->input('procedimento_key');
+        $procedimentosIds = implode(',', $procedimentosSelecionados);
+        $agendamento->procedimento_key = $procedimentosIds;
         $agendamento->save();
 
     }
