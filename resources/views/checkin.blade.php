@@ -35,7 +35,7 @@
             <div class="row">
                 <div class="col">
                     <h3>Tipo de pagamento </h3>
-                    <select id="paymente" name="paymente" class="form-control">
+                    <select id="payment" name="payment" class="form-control">
                         <option value="pix">
                             Pix
                         </option>
@@ -127,7 +127,7 @@
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 var clienteId = {{ $checkin->cliente->id }};
                 var checkboxes = document.querySelectorAll('#procedimento_key:checked');
-                var paymente = document.getElementById('paymente').value;
+                var payment = document.getElementById('payment').value;
 
                 a = checkboxes.forEach(function(checkbox) {
                     procedimento_key.push(checkbox.value);
@@ -137,7 +137,7 @@
                     _token: csrfToken,
                     id: clienteId,
                     procedimento_key: procedimento_key,
-                    paymente: paymente
+                    payment: payment
                 };
 
                 $.ajax({
@@ -145,14 +145,12 @@
                     method: 'put',
                     data:data,
                     success: function(response) {
-                        itens = []
-                        console.log(response);
+                        window.location.href = '/';
                     },
                     error: function(error) {
                         //console.error(error);
                     },
                 });
-                pp = []
 
             }
         })
