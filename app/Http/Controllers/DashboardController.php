@@ -32,6 +32,9 @@ class DashboardController extends Controller
                 $color = "#32CD32";
             }
 
+            if($agendamento->status == 'completo'){
+                $color = "#8B8989";
+            }
             $evento = [
                 "id" => $agendamento->id,
                 "title" => $agendamento->cliente->nome,

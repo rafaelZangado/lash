@@ -66,8 +66,9 @@ class AtendimentoController extends Controller
 
     public function up(Request $request)
     {
-        $agendamento = Agendamento::find($request->id);
+        $cliente_id = $request->id;
 
+        $agendamento = Agendamento::where('cliente_id', $cliente_id)->first();
         $agendamento->status = 'completo';
         $agendamento->payment = $request->input('payment');
         $procedimentosSelecionados = $request->input('procedimento_key');
@@ -128,6 +129,8 @@ class AtendimentoController extends Controller
         $table_agendamento->final_time = null;
         $table_agendamento->return_date = null;
         $table_agendamento->whastapp = '';
+        $table_agendamento->payment = '';
+
         $table_agendamento->save();
     }
 
