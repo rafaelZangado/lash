@@ -110,8 +110,8 @@
 
         swalWithBootstrapButtons.fire({
             icon: 'question',
-            title: 'Iniciar Atendimento',
-            text: 'Você deseja realmente iniciar o atendimento ?°',
+            title: 'Finalizar atendimento ?',
+            text: 'Antes de encerrar o atendimenro verifique se está TUDO CERTO !',
             showCancelButton: true,
             confirmButtonText: 'Sim',
             cancelButtonText: 'Não',
@@ -119,8 +119,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 swalWithBootstrapButtons.fire(
-                    'Iniciando atendimento',
-                    'procedimento iniciado com sucesso.',
+                    'O atendimento foi concluído com sucesso!',
                     'success'
                 )
                 var procedimento_key =[]
