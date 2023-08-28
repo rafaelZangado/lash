@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProcedimentoRequest;
 use App\Models\Procedimento;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ProcedimentoController extends Controller
@@ -35,8 +36,26 @@ class ProcedimentoController extends Controller
 
     }
 
-    public function up()
+    public function delet($id)
     {
+        if ($id) {
+            Procedimento::find($id)->delete();
+        }
+    }
+
+    public function up(ProcedimentoRequest $request, $id)
+    {
+        $dados = $request->validated();
+
+        $procedimento = Procedimento::find($id);
+
+        $procedimento->nome = $dados['nome'];
+        $procedimento->descricao = $dados['descricao'];
+        $precoFormatado = str_replace(['.', ',', ' '], '', $dados['preco']);
+        $precoFormatado = floatval($precoFormatado) / 100;
+        $procedimento->preco = $precoFormatado;
+        $procedimento->save();
+        return redirect()->back()->with('success', 'Informações registradas com sucesso!');
 
     }
 
