@@ -32,8 +32,8 @@ use Illuminate\Support\Facades\Route;
 //Rota Procedimentos
     Route::get('/procedimento', [ProcedimentoController::class, 'index'])->name('procedimento');
     Route::post('/procedimentoSave', [ProcedimentoController::class, 'store'])->name('procedimentoSave');
-    Route::post('/procedimentoEdite', [ProcedimentoController::class, 'up'])->name('procedimentoEdite');
-    Route::post('/procedimentoDelet', [ProcedimentoController::class, 'delet'])->name('procedimentoDelet');
+    Route::put('/procedimentoEdite/{id}', [ProcedimentoController::class, 'up'])->name('procedimentoEdite');
+    Route::get('/procedimentoDelet/{id}', [ProcedimentoController::class, 'delet'])->name('procedimentoDelet');
 
 //Agendamento
     Route::get('/agendamento', [AgendamentoController::class, 'index'])->name('agendamento');
