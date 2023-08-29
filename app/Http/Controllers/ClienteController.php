@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ClienteRequest;
 use App\Models\Cliente;
-use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
@@ -18,24 +18,17 @@ class ClienteController extends Controller
         return view('/clientes', ['clientes' => $clientes]);
     }
 
-    public function novo()
-    {
-        return view('welcome2');
-    }
-
-    public function registrar()
-    {
-        return redirect('Clientes');
-
-    }
-    /**
-     * Show the form for creating a new resource.
+     /**
+     * Delete registro
      *
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function delet($id)
     {
-        //
+        if ($id) {
+            Cliente::find($id)->delete();
+        }
     }
 
     /**
@@ -44,46 +37,19 @@ class ClienteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ClienteRequest $request)
     {
-       $dados = $request->validate([
-          'nome' => 'required',
-          'email' => 'required',
-          'whastapp' => 'required',
-          'instagram' => 'required',
 
-       ]);
        $cliente = new Cliente();
+       $dados = $request->validated();
        $cliente->nome = $dados['nome'];
        $cliente->email = $dados['email'];
        $cliente->whastapp = $dados['whastapp'];
        $cliente->instagram = $dados['instagram'];
+       $cliente->cpf = $dados['cpf'];
        $cliente->save();
        return redirect()->back()->with('success', 'Informações registradas com sucesso!');
 
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -93,19 +59,21 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function up(ClienteRequest $request, $id)
     {
-        //
-    }
+        $cliente = Cliente::find($id);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $dados = $request->validated();
+
+        $cliente->nome = $dados['nome'];
+        $cliente->cpf = $dados['cpf'];
+        $cliente->whastapp = $dados['whastapp'];
+        $cliente->save();
+
+        if($cliente->save()) {
+            return redirect()->back()->with('success', 'ATUALIZAÇÃO FEITA COM SUCESSO.!');
+        } else {
+            return redirect()->back()->with('error', 'não foi possivel fazer mudanças!');
+        }
     }
 }
