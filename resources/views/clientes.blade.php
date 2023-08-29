@@ -13,6 +13,11 @@
               Add novo cliente
           </button>
             <hr>
+            @if(session()->has('success'))
+                <div class="alert alert-success">
+                    {{ session()->get('success') }}
+                </div>
+            @endif
             <div class="table-responsive">
               <table class="table table-hover" id="tabela_filter">
                   <thead>
@@ -21,7 +26,7 @@
                           <th>C.P.F</th>
                           <th>WhastApp</th>
                           <th>
-
+                            Ação
                           </th>
                       </tr>
                   </thead>
@@ -39,7 +44,7 @@
                                     </a>
 
                                     <button type="button" class="btn btn-danger btn-icon-text"
-                                        id="deletarProduto" onclick="delet(this)"
+                                        onclick="delet(this)"
                                         value="{{ $cliente->id }}">
                                         <i class="mdi mdi-delete-forever"></i>
                                     </button>
@@ -67,23 +72,25 @@
                 <input type="text" name="nome" class="form-control" id="exampleInputUsername1" placeholder="Nome completo">
               </div>
               <div class="form-group">
+                <input type="text" name="cpf" class="form-control" id="cpf" placeholder="999.999.999-99" min="11">
+              </div>
+              <div class="form-group">
                 <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
               </div>
               <div class="form-group">
-                <input type="text" name="whastapp" class="form-control" id="exampleInputUsername1" placeholder="2º N contato / WhastApp">
+                <input type="text" name="whastapp" class="form-control" id="exampleInputUsername1" placeholder="WhastApp">
               </div>
               <div class="form-group">
                 <input type="text" name="instagram" class="form-control" id="exampleInputUsername1" placeholder="Instagram">
               </div>
 
-              <button>Salvar </button>
-
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary">Salvar </button>
+              </div>
             </form>
         </div>
-        <div class="modal-footer">
-          {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary">Salvar </button> --}}
-        </div>
+
       </div>
     </div>
   </div>
@@ -102,7 +109,6 @@
                        @method('PUT')
 
                        <!-- Adicione os campos do formulário que deseja editar -->
-
                        <div class="form-group">
                            <input type="text" name='nome'
                            class="form-control"
@@ -123,6 +129,7 @@
                            onkeyup="moeda()" placeholder="{{$cliente->whastapp}}">
                        </div>
                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                            <button type="submit" class="btn btn-primary">Salvar</button>
                        </div>
                    </form>
@@ -131,14 +138,11 @@
        </div>
    </div>
 @endforeach
-@php
-$a = 'Rafael Andrade';
-    @endphp
-@endphp
-  <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
-  <script>
-      function delet(e)
+     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+<script>
+    function delet(e)
       {
 
           valorBotao = e.value;
@@ -153,7 +157,7 @@ $a = 'Rafael Andrade';
           swalWithBootstrapButtons.fire({
               icon: 'question',
               title: 'Excluir Cliente',
-              text: 'Você deseja realmente excluir o cliente ?'{{$a}},
+              text: 'Você deseja realmente excluir o cliente ?',
               showCancelButton: true,
               confirmButtonText: 'Sim',
               cancelButtonText: 'Não',
@@ -161,17 +165,16 @@ $a = 'Rafael Andrade';
           }).then((result) => {
               if (result.isConfirmed) {
                   swalWithBootstrapButtons.fire(
-                      'atendimento excluido',
-                      'que pena, o atendimento foi encerrado.',
+                      'Cliente excluido',
+                      'que pena, o cliente foi excluido do nosso sistema.',
                       'success'
                   )
 
                   $.ajax({
-                      url: '/clientesDelet/' + valorBotao,
+                      url: '/clientes/' + valorBotao,
                       method: 'GET',
                       success: function(arg) {
-
-                          window.location.href = 'clientes'
+                            window.location.href = 'clientes'
                       },
                       error: function(error) {
                           Swal.fire({
