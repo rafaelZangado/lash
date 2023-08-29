@@ -14,9 +14,10 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        return view('/clientes');
+        $clientes = Cliente::all();
+        return view('/clientes', ['clientes' => $clientes]);
     }
-  
+
     public function novo()
     {
         return view('welcome2');
@@ -43,7 +44,7 @@ class ClienteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store( Request $request)
+    public function store(Request $request)
     {
        $dados = $request->validate([
           'nome' => 'required',
@@ -60,7 +61,7 @@ class ClienteController extends Controller
        $cliente->save();
        return redirect()->back()->with('success', 'Informações registradas com sucesso!');
 
-      
+
     }
 
     /**

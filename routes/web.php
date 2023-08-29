@@ -28,6 +28,8 @@ use Illuminate\Support\Facades\Route;
 //Rota clientes
     Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes');
     Route::post('/clientes', [ClienteController::class, 'store'])->name('salvar');
+    Route::put('/clientes/{id}', [ProcedimentoController::class, 'up'])->name('clientesEdite');
+    Route::get('/clientes/{id}', [ProcedimentoController::class, 'delet'])->name('clientesDelet');
 
 //Rota Procedimentos
     Route::get('/procedimento', [ProcedimentoController::class, 'index'])->name('procedimento');
