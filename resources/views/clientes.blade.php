@@ -19,7 +19,7 @@
                 </div>
             @endif
             <div class="table-responsive">
-              <table class="table table-hover" id="tabela_filter">
+              <table class="table table-hover table-striped" id="tabela_filter">
                   <thead>
                       <tr>
                           <th>Nome </th>
