@@ -135,7 +135,6 @@
         {
 
             valorBotao = e.value;
-            console.log('to aki::',valorBotao)
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-success',
@@ -164,8 +163,7 @@
                         url: '/procedimentoDelet/' + valorBotao,
                         method: 'GET',
                         success: function(arg) {
-                            console.log(arg)
-                            console.log('to aki::',valorBotao)
+                           
                             window.location.href = 'procedimento'
                         },
                         error: function(error) {
