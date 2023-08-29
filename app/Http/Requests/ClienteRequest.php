@@ -13,7 +13,7 @@ class ClienteRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,11 @@ class ClienteRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'nome' => 'required',
+            'email' => 'required',
+            'whastapp' => 'required',
+            'cpf' => 'required',
+            'instagram' => 'required',
         ];
     }
 }
