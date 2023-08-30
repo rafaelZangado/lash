@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Route;
    // Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/teste', [DashboardController::class, 'teste'])->name('teste');
     Route::get('/eventos', [DashboardController::class, 'eventos'])->name('eventos');
+    Route::get('/dashboard', [DashboardController::class, 'cardDashboard'])->name('dashboard');
+
     Route::get('/checkin/{id}/checkin', [DashboardController::class, 'checkin'])->name('checkin');
 
 //Rota clientes
