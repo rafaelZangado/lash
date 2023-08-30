@@ -43,7 +43,7 @@ class DashboardController extends Controller
                 'color' =>  $color,
                 'contato' =>  $agendamento->cliente->whastapp,
                 'procedimentos' => $procedimentoNomes,
-                'total' => $total/100
+                'total' => $total
             ];
             $eventos[] = $evento;
         }

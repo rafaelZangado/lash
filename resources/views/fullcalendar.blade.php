@@ -450,6 +450,8 @@
                     end = event.end;
                     description = event.description;
 
+                    var totalFormatado = total.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+
                     valores = [];
                     for ( key in procedimentos) {
                         const v = procedimentos[key];
@@ -458,7 +460,7 @@
 
                     document.getElementById("title").innerHTML = title;
                     document.getElementById("contato").innerHTML = contato = '(' + contato.substring(0, 2) + ') ' + contato.substring(2, 3) + ' ' + contato.substring(3, 7) + '-' + contato.substring(7);
-                    document.getElementById("total").innerHTML = total;
+                    document.getElementById("total").innerHTML = totalFormatado;
                     document.getElementById("buttoncancelatendimento").value = id;
                     document.getElementById("checkout").value = id;
                     document.getElementById("procedimentos").innerHTML = valores.join("<hr> ");

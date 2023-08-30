@@ -31,7 +31,7 @@
                                 <tr>
                                     <td>{{ $procedimento->nome }}</td>
                                     <td>{{ $procedimento->descricao }}</td>
-                                    <td>{{ $procedimento->preco }}</td>
+                                    <td>{{ number_format($procedimento->preco, 2, ',', '.') }}</td>
                                     <td>
                                         <a href="#" type="button" class="btn btn-warning btn-icon-text"
                                             data-bs-toggle="modal"
@@ -74,7 +74,7 @@
                         <input type="text" name='descricao' value='' class="form-control" id="exampleInputUsername1"  placeholder="Descrição" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" name='preco' class="form-control" id="valor" id="exampleInputUsername1" onkeyup="moeda()" placeholder="R$ 0.00" required>
+                        <input type="text" name='preco' class="form-control" id="valor" onkeyup="moeda()" placeholder="R$ 0.00" required>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Salvar </button>
@@ -86,38 +86,35 @@
     </div>
 
     <!--Modal - Editar-->
-    @foreach ($procedimentos as $agendamento)
-        <div class="modal fade " id="editModal{{ $agendamento->id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    @foreach ($procedimentos as $procedimento)
+        <div class="modal fade " id="editModal{{ $procedimento->id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="card-title">Editar Produto| {{$agendamento->nome}} </h4>
+                        <h4 class="card-title">Editar Produto| {{$procedimento->nome}} </h4>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" action="{{ route('procedimentoEdite', $agendamento->id) }}">
+                        <form method="POST" action="{{ route('procedimentoEdite', $procedimento->id) }}">
                             @csrf
                             @method('PUT')
-
-                            <!-- Adicione os campos do formulário que deseja editar -->
-
                             <div class="form-group">
                                 <input type="text" name='nome'
                                 class="form-control"
-                                value="{{$agendamento->nome}}"
-                                placeholder="{{$agendamento->nome}}">
+                                value="{{$procedimento->nome}}"
+                                placeholder="{{$procedimento->nome}}">
                             </div>
                             <div class="form-group">
                                 <input type="text" name='descricao'
                                 class="form-control"
-                                value="{{$agendamento->descricao}}"
-                                placeholder="{{$agendamento->descricao}}">
+                                value="{{$procedimento->descricao}}"
+                                placeholder="{{$procedimento->descricao}}">
                             </div>
                             <div class="form-group">
                                 <input type="text" name='preco'
                                 class="form-control"
-                                id="valor"
-                                value="{{$agendamento->preco}}"
-                                onkeyup="moeda()" placeholder="{{$agendamento->preco}}">
+                                onkeyup="moedaModal(this)"
+                                value="{{$procedimento->preco}}"
+                                placeholder="{{number_format($procedimento->preco, 2, ',', '.')}}">
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary">Salvar</button>
@@ -163,7 +160,7 @@
                         url: '/procedimentoDelet/' + valorBotao,
                         method: 'GET',
                         success: function(arg) {
-                           
+
                             window.location.href = 'procedimento'
                         },
                         error: function(error) {
