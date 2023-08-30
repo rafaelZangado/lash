@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Agendamento;
 use App\Models\Procedimento;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -50,9 +51,7 @@ class DashboardController extends Controller
         return response()->json($eventos);
     }
 
-    public function index(){
-        return view('/dashboard');
-    }
+
 
     public function teste()
     {
@@ -104,5 +103,20 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function cardDashboard()
+    {
+        $hoje = Carbon::today();
+        $amanha = $hoje->copy()->addDay();
+        $umaSemana = $hoje->copy()->addWeek();
+        $agendamentosHoje = Agendamento::whereDate('data', $hoje)->count();
+        $agendamentosAmanha = Agendamento::whereDate('data', $amanha)->count();
+        $agendamentosUmaSemana = Agendamento::whereBetween('data', [$hoje, $umaSemana])->count();
+
+        return  [
+            'agendamentosHoje' => $agendamentosHoje,
+            'agendamentosAmanha' => $agendamentosAmanha,
+            'agendamentosUmaSemana' => $agendamentosUmaSemana
+        ];
+    }
 
 }
