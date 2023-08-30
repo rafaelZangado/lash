@@ -9,49 +9,33 @@ crossorigin="anonymous">
   <ul class="nav" id="menu">
 
     <li class="nav-item">
-      <a class="nav-link" href="{{route('atendimento')}}" style="background: #4B49AC">
-         <i class="icon-grid menu-icon" style="color: #fff"></i>
-         <span class="material-icons"></span>
-        <span class="menu-title" style="color: #fff">
-            Dashboard
-        </span>
-      </a>
-    </li>
-
-    {{-- <li class="nav-item">
-      <a id="link-agendamento" class="nav-link" href="{{route('agendamento')}}" aria-controls="ui-basic" >
-        <i class="mdi mdi-calendar-clock menu-icon" ></i>
-        <span class="menu-title" >
-            Agendamento
-        </span>
-      </a>
-    </li> --}}
-
-    <li class="nav-item">
-      <a id="link-procedimento" class="nav-link"  href="{{route('procedimento')}}" aria-controls="ui-basic">
-        <i class="icon-columns menu-icon"></i>
-        <span class="menu-title">
-            Procedimento
-        </span>
-      </a>
+        <a class="nav-link" style="background: {{ request()->is('/') ? '#4B49AC' : '' }}" href="{{route('atendimento')}}">
+            <i class="icon-grid menu-icon" style="color: {{ request()->is('atendimento') ? '#fff' : '' }}"></i>
+            <span class="material-icons"></span>
+            <span class="menu-title" style="color: {{ request()->is('atendimento') ? '#fff' : '' }}">
+                Dashboard
+            </span>
+        </a>
     </li>
 
     <li class="nav-item">
-      <a id="link-clientes" class="nav-link"  href="{{route('clientes')}}"
-      aria-expanded="false" aria-controls="auth">
-        <i class="icon-head menu-icon"></i>
-        <i class="fas fa-shield-alt"></i>
-        <span class="menu-title">
-          Clientes
-        </span>
-      </a>
+        <a class="nav-link" style="background: {{ request()->is('procedimento') ? '#4B49AC' : '' }}"  href="{{route('procedimento')}}">
+            <i class="icon-grid menu-icon" style="color: {{ request()->is('procedimento*') ? '#fff' : '' }}"></i>
+            <span class="material-icons"></span>
+            <span class="menu-title" style="color: {{ request()->is('procedimento*') ? '#fff' : '' }}">
+                Procedimento
+            </span>
+        </a>
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" onclick="loadContent('views/anamnese.php')">
-        <i class="icon-paper menu-icon"></i>
-        <span class="menu-title">Ficha Anamnese</span>
-      </a>
+        <a class="nav-link" style="background: {{ request()->is('clientes') ? '#4B49AC' : '' }}"  href="{{route('clientes')}}">
+            <i class="icon-grid menu-icon" style="color: {{ request()->is('clientes*') ? '#fff' : '' }}"></i>
+            <span class="material-icons"></span>
+            <span class="menu-title" style="color: {{ request()->is('clientes*') ? '#fff' : '' }}">
+                Clientes
+            </span>
+        </a>
     </li>
 
     <li class="nav-item">
