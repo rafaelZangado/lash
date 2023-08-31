@@ -89,6 +89,15 @@
         <div class="col-md-9 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
+                    @if(session()->has('success'))
+                        <script>
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Atendimento Agendado com sucesso',
+                                text: 'O atendimento foi agendado com sucesso',
+                            })
+                        </script>
+                    @endif
                     <div id='calendar'></div>
                 </div>
             </div>
@@ -375,8 +384,8 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     swalWithBootstrapButtons.fire(
-                        'atendimento excluido',
-                        'que pena, o atendimento foi encerrado.',
+                        'atendimento cancelado',
+                        'que pena, o atendimento foi cancelado.',
                         'success'
                     )
 
@@ -384,7 +393,7 @@
                         url: '/cancel/' + valorBotao + '/cancel',
                         method: 'GET',
 						success: function(arg) {
-							//arg.event.remove()
+                            window.location.href = '/'
                         },
                         error: function(error) {
                            console.log('alguma coisa deu errado')
