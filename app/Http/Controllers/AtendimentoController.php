@@ -93,8 +93,9 @@ class AtendimentoController extends Controller
         $dados['whatsapp'] = Str::replace(['(', ')', '-'], '', $dados['whatsapp']);
 
         $this->registeragenda($dados );
+        return redirect()->back()->with('success', 'Informações registradas com sucesso!');
 
-        return redirect()->route('atendimento')->with('success', 'Agendamento atualizado com sucesso.');
+        //return redirect()->route('atendimento')->with('success', 'Agendamento atualizado com sucesso.');
     }
 
     public function registercliantes($dados)
