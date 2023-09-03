@@ -34,8 +34,8 @@
                         @foreach ($clientes as $cliente)
                             <tr>
                                 <td>{{$cliente->nome}}</td>
-                                <td>{{$cliente->cpf}}</td>
-                                <td>{{$cliente->whastapp}}</td>
+                                <td class="cpf-mask">{{$cliente->cpf}}</td>
+                                <td class="phone-mask">{{$cliente->whastapp}}</td>
                                 <td>
                                     <a href="#" type="button" class="btn btn-warning btn-icon-text"
                                         data-bs-toggle="modal"
@@ -72,13 +72,13 @@
                 <input type="text" name="nome" class="form-control" id="exampleInputUsername1" placeholder="Nome completo">
               </div>
               <div class="form-group">
-                <input type="text" name="cpf" class="form-control" id="cpf" placeholder="999.999.999-99" min="11">
+                <input type="text" name="cpf" class="form-control" id="cpf" placeholder="999.999.999-99" maxlength="14">
               </div>
               <div class="form-group">
                 <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
               </div>
               <div class="form-group">
-                <input type="text" name="whastapp" class="form-control" id="exampleInputUsername1" placeholder="WhastApp">
+                <input type="text" name="whastapp" class="form-control" id="exampleInputUsername1" placeholder="WhastApp" onkeypress="mask(this, mphone);" onblur="mask(this, mphone);">
               </div>
               <div class="form-group">
                 <input type="text" name="instagram" class="form-control" id="exampleInputUsername1" placeholder="Instagram">
@@ -118,15 +118,18 @@
                        <div class="form-group">
                            <input type="text" name='cpf'
                            class="form-control"
-                           value="{{$cliente->cpf}}"
+                           maxlength="14"
+                           id="cpfInput"
+                           oninput="cpfModal(this)"
+                           value="{{ substr($cliente->cpf, 0, 3) . '.' . substr($cliente->cpf, 3, 3) . '.' . substr($cliente->cpf, 6, 3) . '-' . substr($cliente->cpf, 9, 2)}}"
                            placeholder="{{$cliente->cpf}}">
                        </div>
                        <div class="form-group">
                            <input type="text" name='whastapp'
                            class="form-control"
                            id="valor"
-                           value="{{$cliente->whastapp}}"
-                           onkeyup="moeda()" placeholder="{{$cliente->whastapp}}">
+                           value="{{'(' . substr($cliente->whastapp, 0, 2) . ') ' . substr($cliente->whastapp, 2, 5) . '-' . substr($cliente->whastapp, 7)}}"
+                           onkeyup="moeda()" placeholder="{{'(' . substr($cliente->whastapp, 0, 2) . ') ' . substr($cliente->whastapp, 2, 5) . '-' . substr($cliente->whastapp, 7)}}">
                        </div>
                        <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -140,8 +143,14 @@
 @endforeach
 
      <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
 <script>
+    $(document).ready(function() {
+        $('.phone-mask').mask('(00) 00000-0000');
+        $('.cpf-mask').mask('000.000.000-00', {reverse: true});
+
+    });
     function delet(e)
       {
 
