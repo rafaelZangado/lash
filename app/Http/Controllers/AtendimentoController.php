@@ -121,12 +121,15 @@ class AtendimentoController extends Controller
 
         $table_agendamento = resolve(Agendamento::class);
         $id_cliente = $this->registercliantes($dados);
+
+        $agenda = $this->buscarCliente($dados['cpf']);
+        $table_agendamento->status = $agenda ? 'return_date' : 0;
+        
         $table_agendamento->data = $dados['date'];
         $table_agendamento->opening_hours = $dados['opening_hours'];
         $table_agendamento->procedimento_key = implode(',', $dados['procedimento_key']);
         $table_agendamento->cliente_id = $id_cliente;
         $table_agendamento->procedimento_id = 1;
-        $table_agendamento->status = 0;
         $table_agendamento->final_time = null;
         $table_agendamento->return_date = null;
         $table_agendamento->whastapp = '';
