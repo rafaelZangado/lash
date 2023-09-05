@@ -85,12 +85,12 @@ class AtendimentoController extends Controller
             'opening_hours' => 'required',
             'cpf' => 'required',
             'nome' => 'required',
-            'whatsapp' => 'required',
+            'whastapp' => 'required',
             'procedimento_key' => 'required|array',
         ]);
 
         $dados['cpf'] = Str::replace(['.', '-'], '', $dados['cpf']);
-        $dados['whatsapp'] = Str::replace(['(', ')', '-'], '', $dados['whatsapp']);
+        $dados['whastapp'] = Str::replace(['(', ')', '-'], '', $dados['whastapp']);
 
         $this->registeragenda($dados );
         return redirect()->back()->with('success', 'Informações registradas com sucesso!');
@@ -103,7 +103,7 @@ class AtendimentoController extends Controller
         $table_cliente = resolve(Cliente::class);
 
         $table_cliente->nome = $dados['nome'];
-        $table_cliente->whastapp = $dados['whatsapp'];
+        $table_cliente->whastapp = $dados['whastapp'];
         $table_cliente->cpf = $dados['cpf'];
         $table_cliente->email = '';
         $table_cliente->instagram = '';
@@ -150,8 +150,25 @@ class AtendimentoController extends Controller
         }
     }
 
-    public function checkout(Request $request)
+    public function buscarCliente($cpf)
     {
-        dd( $request->all());
+        $agenda = Agendamento::with('cliente')
+        ->whereHas('cliente', function ($query) use ($cpf) {
+            $query->where('cpf', $cpf);
+        })
+        ->latest()
+        ->first();
+
+        if (!$agenda) {
+            return response()->json(['message' => 'Nenhum agendamento encontrado para este CPF'], 404);
+        }
+
+        return [
+            'id' => $agenda->cliente->id,
+            'nome' => $agenda->cliente->nome,
+            'whastapp' => $agenda->cliente->whastapp,
+            'procedimentos' => explode(',', $agenda->procedimento_key),
+            'data' => $agenda->data
+        ];
     }
 }

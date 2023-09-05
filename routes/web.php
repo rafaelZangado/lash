@@ -56,3 +56,4 @@ use Illuminate\Support\Facades\Route;
     Route::get('/cancel/{id}/cancel', [AtendimentoController::class, 'cancel'])->name('cancel');
     Route::post('/atendimento/store', [AtendimentoController::class, 'store'])->name('atendimentosave');
     Route::put('/agendamento/{id}/checkout', [AtendimentoController::class, 'checkout'])->name('agendamento-checkout');
+    Route::put('/buscarcliente/{cpf}', [AtendimentoController::class, 'buscarCliente'])->name('buscar');
