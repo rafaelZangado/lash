@@ -70,12 +70,25 @@
                 <input class="form-control" type="file" id="formFileMultiple" multiple disabled>
             </div>
 
-            <div class="modal-footer">
+            <h3 class="form-label">Marcar Retorno</h3>
+            <label style="color: rgb(255, 2, 2)">⚠️ Ops, no momento esse campo ainda não esta disponivel</label>
+            <div class="row">
+                <div class="col">
+                    <label>[Sugestão 21/09 ] </label>
+                    <input class="form-control" type="date" multiple disabled>
+                </div>
 
-            <button type="button" class="btn btn-primary btn-rounded btn-icon-text" id="buttonplay"
-                value="" >
-                Finalizar Checkin
-            </button>
+                <div class="col">
+                    <label>[Sugestão 8h ] </label>
+                    <input class="form-control" type="time" multiple disabled>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-rounded btn-icon-text" id="buttonplay"
+                    value="" >
+                    Finalizar Checkin
+                </button>
             </div>
 
         </div>
