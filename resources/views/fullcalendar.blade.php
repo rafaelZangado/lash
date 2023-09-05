@@ -9,6 +9,7 @@
     <!-- Include a required theme -->
     {{-- <script src="sweetalert2.all.min.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <style>
         #calendar {
@@ -93,11 +94,21 @@
                         <script>
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Atendimento Agendado com sucesso',
+                                title: 'Atendimento Agendado com sucesso.',
                                 text: 'O atendimento foi agendado com sucesso',
                             })
                         </script>
                     @endif
+                    @if(session()->has('upsuccess'))
+                        <script>
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Atualização realizada com sucesso.',
+                                text: 'Atualização solicitada foi concluida com sucesso !',
+                            })
+                        </script>
+                    @endif
+
                     <div id='calendar'></div>
                 </div>
             </div>
@@ -182,13 +193,15 @@
                                     id="date-input">
                             </div>
                             <div class="col">
-                                <input class="form-control" placeholder="Nome" type="text" id="appt" name="nome"
+                                <input class="form-control" placeholder="Nome" type="text" id="nome" name="nome"
                                     required>
                             </div>
                             <div class="col">
 
-                                <input class="form-control" placeholder="(99) 9 9999-9999" type="text" id="phone" onkeypress="mask(this, mphone);" onblur="mask(this, mphone);"
-                                    name="whatsapp" required>
+                                <input class="form-control" placeholder="(99) 9 9999-9999" type="text" id="whastapp"
+                                onkeypress="mask(this, mphone);" onblur="mask(this, mphone);"
+                                    name="whastapp"
+                                    required>
                             </div>
                         </div>
 
@@ -289,7 +302,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="card-title">Iniciar Atendimento | {{$agendamento->cliente->nome}} </h4>
+                        <h4 class="card-title">Editar Atendimento | {{$agendamento->cliente->nome}} </h4>
                     </div>
                     <div class="modal-body">
                         <form method="POST" action="{{ route('agendamento-update', $agendamento->id) }}">
@@ -527,5 +540,6 @@
     </script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('js/buscarcliente.js') }}"></script>
 
 @endsection
