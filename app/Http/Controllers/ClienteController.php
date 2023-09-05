@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ClienteRequest;
 use App\Models\Cliente;
-
 class ClienteController extends Controller
 {
     /**
@@ -44,9 +43,9 @@ class ClienteController extends Controller
        $dados = $request->validated();
        $cliente->nome = $dados['nome'];
        $cliente->email = $dados['email'];
-       $cliente->whastapp = $dados['whastapp'];
+       $cliente->whastapp = preg_replace('/[^0-9]/', '', $dados['whastapp']);
        $cliente->instagram = $dados['instagram'];
-       $cliente->cpf = $dados['cpf'];
+       $cliente->cpf = preg_replace('/[^0-9]/', '', $dados['cpf']);
        $cliente->save();
        return redirect()->back()->with('success', 'Informações registradas com sucesso!');
 

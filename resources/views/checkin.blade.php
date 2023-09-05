@@ -51,6 +51,25 @@
                     </select>
                 </div>
             </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-4">
+                        <h3  class="form-label">Comentario</h3>
+                        <label style="color: rgb(255, 2, 2)">⚠️ Ops, no momento esse campo ainda não esta disponivel</label>
+                        <textarea class="form-control"
+                        placeholder="Você pode registrar algum comentário aqui após a conclusão do atendimento."
+                        rows="3" disabled></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <h3 for="formFileMultiple" class="form-label">Enviar fotos do atendimenro</h3>
+                <label style="color: rgb(255, 2, 2)">⚠️ Ops, no momento esse campo ainda não esta disponivel</label>
+                <input class="form-control" type="file" id="formFileMultiple" multiple disabled>
+            </div>
+
             <div class="modal-footer">
 
             <button type="button" class="btn btn-primary btn-rounded btn-icon-text" id="buttonplay"
