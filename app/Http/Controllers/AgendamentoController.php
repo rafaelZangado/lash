@@ -114,7 +114,9 @@ class AgendamentoController extends Controller
         $agendamento->procedimento_key = $procedimentosIds;
         $agendamento->save();
 
-        return redirect()->route('agendamento')->with('success', 'Agendamento atualizado com sucesso.');
+        return redirect()->back()->with('upsuccess', 'Informações registradas com sucesso!');
+
+        //return redirect()->route('agendamento')->with('success', 'Agendamento atualizado com sucesso.');
     }
 
     public function start(Request $request, $id)
@@ -185,7 +187,7 @@ class AgendamentoController extends Controller
         } else {
           $agendamentos = Agendamento::all();
         }
-        dd( $filtro);
+        
         return view('agendamento', ['agendamentos' => $agendamentos]);
     }
 }

@@ -24,8 +24,8 @@ class DashboardController extends Controller
             $procedimentoNomes = $procedimentos->pluck('nome', 'id')->toArray();
             $total = $procedimentos->sum('preco');
             $data = $agendamento->data;
-            if($agendamento->status == 'rescheduled'){
-              $data  = $agendamento->return_date;
+            if($agendamento->status == 'return_date'){
+              //$data  = $agendamento->return_date;
               $color = "#FFD700";
             } elseif ($agendamento->status === 'cancel_atend'){
                 $color = "#FF0000";

@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('cpf').addEventListener('input', function(e) {
+        console.log('entrar')
         let value = e.target.value.replace(/\D/g, '');
         const length = value.length;
 
@@ -47,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function moeda(){
         var elemento = document.getElementById('valor');
         var valor = elemento.value;
-        
+
         valor = valor + '';
         valor = parseInt(valor.replace(/[\D]+/g,''));
         valor = valor + '';
@@ -73,4 +74,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         elemento.value = valor;
+    }
+
+    function cpfModal(e) {
+        var input = e;
+        var value = input.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos do valor
+        cpf = value.length
+        if (cpf > 3 && cpf <=6) {
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        }else if(cpf > 6 && cpf <=9) {
+            value = value.replace(/(\d{3})(\d{3})(\d)/, '$1.$2.$3');
+        }else if (cpf > 9) {
+            value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        }
+        input.value = value; // Define o valor formatado de volta no campo de entrada
     }
