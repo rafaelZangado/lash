@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\AtendimentoController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ConfiguraController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProcedimentoController;
 use Illuminate\Support\Facades\Route;
@@ -57,3 +58,6 @@ use Illuminate\Support\Facades\Route;
     Route::post('/atendimento/store', [AtendimentoController::class, 'store'])->name('atendimentosave');
     Route::put('/agendamento/{id}/checkout', [AtendimentoController::class, 'checkout'])->name('agendamento-checkout');
     Route::put('/buscarcliente/{cpf}', [AtendimentoController::class, 'buscarCliente'])->name('buscar');
+
+//Configurações
+    Route::get('/myconfig', [ConfiguraController::class, 'index'])->name('myconfig');
