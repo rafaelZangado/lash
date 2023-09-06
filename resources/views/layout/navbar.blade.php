@@ -39,10 +39,13 @@ crossorigin="anonymous">
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" href="#">
-        <i class="icon-paper menu-icon"></i>
-        <span class="menu-title">Configuração</span>
-      </a>
+        <a class="nav-link" style="background: {{ request()->is('myconfig') ? '#4B49AC' : '' }}"  href="{{route('myconfig')}}">
+            <i class="icon-grid menu-icon" style="color: {{ request()->is('myconfig*') ? '#fff' : '' }}"></i>
+            <span class="material-icons"></span>
+            <span class="menu-title" style="color: {{ request()->is('myconfig*') ? '#fff' : '' }}">
+                Configuração
+            </span>
+        </a>
     </li>
 
   </ul>
