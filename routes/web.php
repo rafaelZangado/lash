@@ -61,3 +61,6 @@ use Illuminate\Support\Facades\Route;
 
 //Configurações
     Route::get('/myconfig', [ConfiguraController::class, 'index'])->name('myconfig');
+    Route::post('/preagenda', [ConfiguraController::class, 'configreturn']);
+
+

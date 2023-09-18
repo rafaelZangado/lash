@@ -48,32 +48,38 @@ document.addEventListener('DOMContentLoaded', function() {
     function moeda(){
         var elemento = document.getElementById('valor');
         var valor = elemento.value;
+        if(!valor) {
+            valor = 0;
+        } else {
+            valor = valor + '';
+            valor = parseInt(valor.replace(/[\D]+/g,''));
+            valor = valor + '';
+            valor = valor.replace(/([0-9]{2})$/g, ",$1");
 
-        valor = valor + '';
-        valor = parseInt(valor.replace(/[\D]+/g,''));
-        valor = valor + '';
-        valor = valor.replace(/([0-9]{2})$/g, ",$1");
+            if (valor.length > 6) {
+                valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+            }
 
-        if (valor.length > 6) {
-            valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+            elemento.value = valor;
         }
-
-        elemento.value = valor;
     }
 
     function moedaModal(elemento) {
         var valor = elemento.value;
+        if(!valor) {
+            valor = 0;
+        } else {
+            valor = valor + '';
+            valor = parseInt(valor.replace(/[\D]+/g, ''));
+            valor = valor + '';
+            valor = valor.replace(/([0-9]{2})$/g, ",$1");
 
-        valor = valor + '';
-        valor = parseInt(valor.replace(/[\D]+/g, ''));
-        valor = valor + '';
-        valor = valor.replace(/([0-9]{2})$/g, ",$1");
+            if (valor.length > 6) {
+                valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+            }
 
-        if (valor.length > 6) {
-            valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+            elemento.value = valor;
         }
-
-        elemento.value = valor;
     }
 
     function cpfModal(e) {
