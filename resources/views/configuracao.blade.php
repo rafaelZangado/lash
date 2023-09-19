@@ -2,6 +2,8 @@
 @section('title', 'Configuração')
 @section('tela')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <div class="row">
@@ -59,9 +61,19 @@
                     Taxa pré-agendamento
                 </h4>
                 <div class="form-group">
-                    <input type="text" id='valor' onkeyup="moedaModal(this)" class="form-control form-control-lg" placeholder="R$ 0.00" >
+                    <input type="text"
+                        onkeyup="moedaModal(this)"
+                        class="form-control form-control-lg"
+                        id='preco'
+                        value="{{$myconfig->pre_schedule}}"
+                        placeholder="R$ 0.00" >
                 </div>
-                    <button type="button" class="btn btn-primary btn-rounded btn-icon-text" onclick="preagendamento()" >Salvar</button>
+                    <button type="button"
+                    class="btn btn-primary btn-rounded btn-icon-text"
+                    onclick="preagendamento()"
+                    id="buttonplay"
+                    value=""
+                    >Salvar</button>
                 </div>
             </div>
         </div>
@@ -162,36 +174,63 @@
 
     <script>
 
-        function preagendamento()
-        {
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            var preco = document.getElementById('valor').value;
-            data = {
-                _token: csrfToken,
-                preco: preco
+        document.getElementById('buttonplay').addEventListener('click', function() {
+            var preco = document.getElementById('preco').value;
 
-            }
-           $.ajax({
-                url: '/preagenda',
-                method: 'POST',
-                data: data,
-                success: function(arg){
-                    Swal.fire({
-                        icon: 'sucess',
-                        title: 'Valor da Taxa configurado',
-                        text: 'Tudo certo, voce configurou para que tenha um valor do pre agendamento.',
-                    })
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
                 },
-                error: function(error) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Alguma coisa deu errada, verifique com o administrativo',
-                    })
-                }
-           })
+                buttonsStyling: false
+            })
 
-        }
+            swalWithBootstrapButtons.fire({
+                icon: 'question',
+                title: 'Adicionar Taxa',
+                text: 'Você esta adicionando uma taxa de R$ ' + preco + ' para cada atendimento que for feito tera esse desconto',
+                showCancelButton: true,
+                confirmButtonText: 'Sim',
+                cancelButtonText: 'Não',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire(
+                        'Configuração realizada com sucesso.',
+                        'success'
+                    )
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+                    console.log(preco)
+                    data = {
+                        _token: csrfToken,
+                        preco: preco
+                    }
+
+                    $.ajax({
+                        url: '/preagenda',
+                        method: 'POST',
+                        data: data,
+                        success: function(response) {
+                            Swal.fire({
+                                icon: 'sucess',
+                                title: 'Valor da Taxa configurado',
+                                text: 'Tudo certo, voce configurou para que tenha um valor do pre agendamento.',
+                            })
+                            window.location.href = '/myconfig';
+                        },
+                        error: function(error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Alguma coisa deu errada, verifique com o administrativo',
+                            })
+                        },
+                    });
+
+                }
+            })
+        });
 
 
         $(document).ready(function() {
