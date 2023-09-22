@@ -43,7 +43,7 @@ class DashboardController extends Controller
                 'color' =>  $color,
                 'contato' =>  $agendamento->cliente->whastapp,
                 'procedimentos' => $procedimentoNomes,
-                'total' => $total
+                'total' => $total,
             ];
             $eventos[] = $evento;
         }
@@ -75,7 +75,8 @@ class DashboardController extends Controller
             $procedimentosPorId[$agendamentoId] = $nomesProcedimentos;
         }
 
-
+        $config = resolve(ConfiguraController::class);
+        $myConfig = $config->rafael();
 
         $keyproce = explode(',',$checkin->procedimento_key);
         $proce = Procedimento::find($keyproce);
@@ -99,7 +100,18 @@ class DashboardController extends Controller
             'procedimentosPorId' => $procedimentosPorId,
             'pro' => $pro,
             'return' => $return,
-            'total' => $total
+            'total' => $total,
+            'myConfig' => $myConfig
+        ]);
+    }
+
+    public function background()
+    {
+        $config = resolve(ConfiguraController::class);
+        $myConfig = $config->rafael();
+      
+        return view('/blanck', [
+            'myConfig' => $myConfig
         ]);
     }
 

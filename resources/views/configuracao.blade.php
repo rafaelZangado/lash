@@ -113,11 +113,15 @@
                         </div>
                         <div class="col">
                             <label class="form-label">Botão Deletar</label>
-                            <button class="form-control" style="background: #FF0000">Salvar</button>
+                            <input type="color" class="form-control form-control-color" id="colorInputEditar" value="#FF0000">
                         </div>
                         <div class="col">
                             <label class="form-label">Botão Editar</label>
                             <input type="color" class="form-control form-control-color" id="colorInputEditar" value="#FFFF00">
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Botão Menu</label>
+                            <input type="color" class="form-control form-control-color" id="colorInputEditar" value="#4B49AC">
                         </div>
                     </div>
                 </div>
@@ -129,12 +133,16 @@
                     <div class="row">
                         <div class="col">
                             <label class="form-label">Plano de fundo</label>
-                            <input type="color" class="form-control form-control-color" id="colorInputPlanoFundo" value="#bbb6d9">
+                            <input type="color"
+                            class="form-control form-control-color"
+                            id="buttonBackground"
+                            value="{{$myconfig->background}}">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-rounded btn-icon-text" id="buttonplay" disabled>Salvar</button>
+                    <button type="button" class="btn btn-primary btn-rounded btn-icon-text"
+                    id="buttonBackgroundSave" value="">Salvar</button>
                 </div>
             </div>
         </div>
@@ -168,11 +176,69 @@
 
 
 
-
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
     <script>
+
+        document.getElementById('buttonBackgroundSave').addEventListener('click', function(){
+            var buttonBackground = document.getElementById('buttonBackground').value;
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                icon: 'question',
+                title: 'Alterar plano de fundo',
+                text: 'Você esta mudando o plano de fundo para cor '+ buttonBackground,
+                showCancelButton: true,
+                confirmButtonText: 'Sim',
+                cancelButtonText: 'Não',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire(
+                        'Configuração realizada com sucesso.',
+                        'success'
+                    )
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+                    console.log(preco)
+                    data = {
+                        _token: csrfToken,
+                        background: buttonBackground
+                    }
+
+                    $.ajax({
+                        url: '/preagenda',
+                        method: 'POST',
+                        data: data,
+                        success: function(response) {
+                            Swal.fire({
+                                icon: 'sucess',
+                                title: 'Plano de fundo alterado com sucesso',
+                            })
+                            window.location.href = '/myconfig';
+                        },
+                        error: function(error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Alguma coisa deu errada, verifique com o administrativo',
+                            })
+                        },
+                    });
+
+                }
+            })
+
+
+        })
 
         document.getElementById('buttonplay').addEventListener('click', function() {
             var preco = document.getElementById('preco').value;
@@ -204,7 +270,7 @@
                     console.log(preco)
                     data = {
                         _token: csrfToken,
-                        preco: preco
+                        preco: preco,
                     }
 
                     $.ajax({

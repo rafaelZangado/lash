@@ -10,7 +10,17 @@
         <div class="card-body">
             <p> Nome: &#128526; {{$checkin->cliente->nome }}</p>
             <p> Contato: {{ $checkin->cliente->whastapp}}</p>
-            <h2>Total R$: <b id='tela'>{{$total}}</b></h2>
+            <h2>Total R$: <span id="tela">{{ $total }}</span>
+                @if($myConfig->pre_schedule)
+                    <span style="color: rgb(255, 2, 2)">
+                        - {{ number_format($myConfig->pre_schedule, 2, ',', '.') }}
+                    </span> =
+                    <span style="color: rgb(3, 151, 25)">
+                        {{ number_format ($total - $myConfig->pre_schedule , 2, ',', '.')}}
+                    </span>
+                @endif
+            </h2>
+
             <hr>
 
             <div class="form-group container text-center">

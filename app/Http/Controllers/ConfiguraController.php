@@ -52,12 +52,20 @@ class ConfiguraController extends Controller
             'pre_schedule' => $taxa,
         ]);
 
-        if ($atualizacao) {
-            return 'salvo';
-        } else {
-            return 'erro';
+        if($request->background)
+        {
+
+            $confi->where('id', 1)->update([
+                'background' => $request->background,
+            ]);
         }
 
+
+    }
+
+    public function rafael()
+    {
+        return $this->config->where('id', 1)->first();
     }
 
 }

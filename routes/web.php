@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Route;
    // Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/teste', [DashboardController::class, 'teste'])->name('teste');
     Route::get('/eventos', [DashboardController::class, 'eventos'])->name('eventos');
+    //Route::get('/blanck', [DashboardController::class, 'background']);
+
     Route::get('/dashboard', [DashboardController::class, 'cardDashboard'])->name('dashboard');
 
     Route::get('/checkin/{id}/checkin', [DashboardController::class, 'checkin'])->name('checkin');
@@ -61,6 +63,6 @@ use Illuminate\Support\Facades\Route;
 
 //Configurações
     Route::get('/myconfig', [ConfiguraController::class, 'index'])->name('myconfig');
-    Route::post('/preagenda', [ConfiguraController::class, 'configreturn']);
+    Route::post('/preagenda', [ConfiguraController::class, 'taxagenda']);
 
 

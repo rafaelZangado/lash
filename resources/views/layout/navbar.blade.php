@@ -10,9 +10,9 @@ crossorigin="anonymous">
 
     <li class="nav-item">
         <a class="nav-link" style="background: {{ request()->is('/') ? '#4B49AC' : '' }}" href="{{route('atendimento')}}">
-            <i class="icon-grid menu-icon" style="color: {{ request()->is('atendimento') ? '#fff' : '' }}"></i>
+            <i class="icon-grid menu-icon" style="color: {{ request()->is('/*') ? '#fff' : '' }}"></i>
             <span class="material-icons"></span>
-            <span class="menu-title" style="color: {{ request()->is('atendimento') ? '#fff' : '' }}">
+            <span class="menu-title" style="color: {{ request()->is('/*') ? '#fff' : '' }}">
                 Dashboard
             </span>
         </a>

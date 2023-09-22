@@ -45,7 +45,7 @@
             @include('layout/navbar')
 
             <div class="main-panel">
-                <div class="content-wrapper">
+                <div class="content-wrapper" style="background: {{$myConfig->background ?? ''}}">
                     <div id="content">
                         @yield('tela')
                     </div>
