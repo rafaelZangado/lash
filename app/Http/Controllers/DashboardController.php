@@ -36,6 +36,7 @@ class DashboardController extends Controller
             if($agendamento->status == 'completo'){
                 $color = "#8B8989";
             }
+            
             $evento = [
                 "id" => $agendamento->id,
                 "title" => $agendamento->cliente->nome,
@@ -109,7 +110,7 @@ class DashboardController extends Controller
     {
         $config = resolve(ConfiguraController::class);
         $myConfig = $config->rafael();
-      
+
         return view('/blanck', [
             'myConfig' => $myConfig
         ]);

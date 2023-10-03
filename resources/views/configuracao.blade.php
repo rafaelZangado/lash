@@ -158,17 +158,17 @@
                 <div class="row">
                     <button type="button" onclick="adicionarCampos()" class="btn btn-success btn-rounded btn-icon">+</button>
                     <div class="col">
-                        <input type="text" class="form-control form-control-lg" placeholder="15 Dias">
+                        <input type="text" class="form-control form-control-lg" id='day' value='15' placeholder="15 Dias">
                     </div>
 
                     <div class="col">
-                        <input type="number" class="form-control form-control-lg" placeholder="0%" max="100" min="0">
+                        <input type="number" class="form-control form-control-lg" id='discount' value='0' placeholder="0%" max="100" min="0">
                     </div>
 
                     <button type="button" onclick="removerCampos(this)" class="btn btn-danger btn-rounded btn-icon">-</button>
                 </div>
                 <br>
-                <button type="button" class="btn btn-primary btn-rounded btn-icon-text" id="buttonplay" disabled>Salvar</button>
+                <button type="button" class="btn btn-primary btn-rounded btn-icon-text" id="buttonreturn" >Salvar</button>
             </div>
         </div>
     </div>
@@ -180,6 +180,29 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
     <script>
+
+        document.getElementById('buttonreturn').addEventListener('click', function(){
+            var day = document.getElementById('day').value;
+            var discount = document.getElementById('discount').value;
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            data = {
+                day: day,
+                discount: discount,
+            },
+
+            $.ajax({
+                url: 'local',
+                method: 'post',
+                data: data,
+                success: function(response){
+
+                }
+
+
+            });
+
+        });
 
         document.getElementById('buttonBackgroundSave').addEventListener('click', function(){
             var buttonBackground = document.getElementById('buttonBackground').value;
@@ -311,22 +334,22 @@
             });
         });
 
-      new SlimSelect({
-          select: '#multiple'
-      })
+        new SlimSelect({
+            select: '#multiple'
+        })
 
-      $(document).ready(function () {
-          $('#tabela_filter').DataTable();
-      });
+        $(document).ready(function () {
+            $('#tabela_filter').DataTable();
+        });
 
-      $(document).ready(function(){
-          $("#myInput").on("keyup", function() {
-              var value = $(this).val().toLowerCase();
-              $("#myTable tr").filter(function() {
-                  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-              });x
-          });
-      });
+        $(document).ready(function(){
+            $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });x
+            });
+        });
 
         function adicionarCampos() {
             const container = document.getElementById('container');
@@ -374,7 +397,7 @@
             const container = row.parentElement;
             container.removeChild(row);
         }
-      </script>
+    </script>
 
 @endsection
 

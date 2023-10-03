@@ -8,6 +8,7 @@ use App\Models\Procedimento;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class AtendimentoController extends Controller
@@ -83,13 +84,17 @@ class AtendimentoController extends Controller
         $dados = $request->validate([
             'date' => 'required|date',
             'opening_hours' => 'required',
-            'cpf' => 'required',
+            'cpf' => 'nullable',
             'nome' => 'required',
             'whastapp' => 'required',
             'procedimento_key' => 'required|array',
         ]);
 
-        $dados['cpf'] = Str::replace(['.', '-'], '', $dados['cpf']);
+        if (!isset($dados['cpf'])) {
+            $dados['cpf'] = '';
+        } else {
+            $dados['cpf'] = Str::replace(['.', '-'], '', $dados['cpf']);
+        }
         $dados['whastapp'] = Str::replace(['(', ')', '-'], '', $dados['whastapp']);
 
         $this->registeragenda($dados );
@@ -124,7 +129,6 @@ class AtendimentoController extends Controller
 
         $agenda = $this->buscarCliente($dados['cpf']);
         $table_agendamento->status = $agenda ? 'return_date' : 0;
-        
         $table_agendamento->data = $dados['date'];
         $table_agendamento->opening_hours = $dados['opening_hours'];
         $table_agendamento->procedimento_key = implode(',', $dados['procedimento_key']);
@@ -147,7 +151,6 @@ class AtendimentoController extends Controller
 
     public function delete($id)
     {
-
         if ($id) {
             Agendamento::find($id)->delete();
         }
@@ -155,23 +158,24 @@ class AtendimentoController extends Controller
 
     public function buscarCliente($cpf)
     {
-        $agenda = Agendamento::with('cliente')
-        ->whereHas('cliente', function ($query) use ($cpf) {
+
+        $agenda = Agendamento::whereHas('cliente', function ($query) use ($cpf) {
             $query->where('cpf', $cpf);
-        })
-        ->latest()
+        })->latest()
         ->first();
 
-        if (!$agenda) {
-            return response()->json(['message' => 'Nenhum agendamento encontrado para este CPF'], 404);
+        if (!$agenda || !$cpf) {
+            //return response()->json(['message' => 'Nenhum agendamento encontrado para este CPF'], null);
+            return null;
         }
 
-        return [
+        return  [
             'id' => $agenda->cliente->id,
             'nome' => $agenda->cliente->nome,
             'whastapp' => $agenda->cliente->whastapp,
             'procedimentos' => explode(',', $agenda->procedimento_key),
             'data' => $agenda->data
         ];
+
     }
 }

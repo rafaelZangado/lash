@@ -8,6 +8,8 @@
     <script src="{{ asset('js/fullcalendar/pt-br.global.js') }}"></script>
     <!-- Include a required theme -->
     {{-- <script src="sweetalert2.all.min.js"></script> --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -190,7 +192,7 @@
                         <div class="row form-group">
                             <div class="col">
                                 <input class="form-control" placeholder="999.999.999-99" type="text" id="cpf"  maxlength="14" name="cpf"
-                                    id="date-input">
+                                    id="date-input" disabled>
                             </div>
                             <div class="col">
                                 <input class="form-control" placeholder="Nome" type="text" id="nome" name="nome"
@@ -274,21 +276,30 @@
                         class="btn btn-primary btn-rounded btn-icon-text"
                         id="checkout"
                         value="">
+                        <i class="mdi mdi-coffee-to-go"></i>
                         <i>check in</i>
                         </button>
 
-                        <button type="button" class="btn btn-danger btn-icon-text" id="buttoncancelatendimento"
+                        <button type="button" class="btn btn-danger btn-icon-text"
+                            id="buttoncancelatendimento"
+                            value="">
+                            <i class="mdi mdi-close-octagon"></i>
+                        </button>
+
+                        <button type="button" class="btn btn-dark btn-icon-text"
+                            id="buttondeletaratendimento"
                             value="">
                             <i class="mdi mdi-delete-forever"></i>
                         </button>
 
-                            <button type="button" class="btn btn-warning btn-icon-text"
-                                data-bs-toggle="modal"
-                                data-bs-target="#editar"
-                                id="buttonedite"
+                        <button type="button" class="btn btn-warning btn-icon-text"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editar"
+                            id="buttonedite"
                             value="">
                             <i class="mdi mdi-cached"></i>
                         </button>
+
                     </div>
                 </div>
             </div>
@@ -348,7 +359,10 @@
 
 
     <script>
-
+        // In your Javascript (external .js resource or <script> tag)
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
         document.getElementById('cpf').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             const length = value.length;
@@ -378,6 +392,49 @@
 
         document.getElementById('buttoncancelatendimento').addEventListener('click', function() {
 			valorBotao = this.value;
+            console.log(valorBotao)
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                icon: 'question',
+                title: 'Cancelar Atendimento',
+                text: 'Você deseja realmente cancelar o atendimento ?',
+                showCancelButton: true,
+                confirmButtonText: 'Sim',
+                cancelButtonText: 'Não',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire(
+                        'atendimento cancelado',
+                        'que pena, o atendimento foi cancelado.',
+                        'success'
+                    )
+
+                    $.ajax({
+                        url: '/cancel/' + valorBotao + '/cancel',
+                        method: 'GET',
+						success: function(arg) {
+                            window.location.href = '/'
+                        },
+                        error: function(error) {
+                           console.log('alguma coisa deu errado')
+                        }
+                    });
+                }
+            })
+        });
+
+        document.getElementById('buttondeletaratendimento').addEventListener('click', function() {
+            valorBotao = this.value;
+            console.log(valorBotao)
+
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-success',
@@ -403,7 +460,7 @@
                     )
 
                     $.ajax({
-                        url: '/cancel/' + valorBotao + '/cancel',
+                        url: '/delete/' + valorBotao + '/delete',
                         method: 'GET',
 						success: function(arg) {
                             window.location.href = '/'
@@ -484,6 +541,7 @@
                     document.getElementById("contato").innerHTML = contato = '(' + contato.substring(0, 2) + ') ' + contato.substring(2, 3) + ' ' + contato.substring(3, 7) + '-' + contato.substring(7);
                     document.getElementById("total").innerHTML = totalFormatado;
                     document.getElementById("buttoncancelatendimento").value = id;
+                    document.getElementById("buttondeletaratendimento").value = id;
                     document.getElementById("checkout").value = id;
                     document.getElementById("procedimentos").innerHTML = valores.join("<hr> ");
 

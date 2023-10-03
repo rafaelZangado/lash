@@ -6,6 +6,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ConfiguraController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProcedimentoController;
+use App\Http\Controllers\WhatsAppController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -66,3 +67,4 @@ use Illuminate\Support\Facades\Route;
     Route::post('/preagenda', [ConfiguraController::class, 'taxagenda']);
 
 
+    Route::get('/enviar', [WhatsAppController::class, 'msg']);
