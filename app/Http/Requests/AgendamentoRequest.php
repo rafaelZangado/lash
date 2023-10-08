@@ -6,15 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class AgendamentoRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -24,7 +15,12 @@ class AgendamentoRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'date' => ['required','date'],
+            'opening_hours' => 'required',
+            'cpf' => 'required',
+            'nome' => 'required',
+            'whatsapp' => ['required', 'numeric'],
+            'processo' => ['required','array'],
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AtendimentoRequest;
 use App\Models\Agendamento;
 use App\Models\Cliente;
 use App\Models\Procedimento;
@@ -13,6 +14,17 @@ use Illuminate\Support\Str;
 
 class AtendimentoController extends Controller
 {
+    protected $agendamento;
+    protected $cliente;
+
+    public function __construct(
+        Agendamento $agendamento,
+        Cliente $cliente,
+    )
+    {
+        $this->agendamento = $agendamento;
+        $this->cliente = $cliente;
+    }
     public function index()
     {
         $procedimentos = Procedimento::all();
@@ -79,17 +91,9 @@ class AtendimentoController extends Controller
 
     }
 
-    public function store(Request $request)
+    public function store(AtendimentoRequest $request)
     {
-        $dados = $request->validate([
-            'date' => 'required|date',
-            'opening_hours' => 'required',
-            'cpf' => 'nullable',
-            'nome' => 'required',
-            'whastapp' => 'required',
-            'procedimento_key' => 'required|array',
-        ]);
-
+        $dados = $request->validated();       
         if (!isset($dados['cpf'])) {
             $dados['cpf'] = '';
         } else {
@@ -105,46 +109,41 @@ class AtendimentoController extends Controller
 
     public function registercliantes($dados)
     {
-        $table_cliente = resolve(Cliente::class);
+        $this->cliente->nome = $dados['nome'];
+        $this->cliente->whastapp = $dados['whastapp'];
+        $this->cliente->cpf = $dados['cpf'];
+        $this->cliente->email = '';
+        $this->cliente->instagram = '';
 
-        $table_cliente->nome = $dados['nome'];
-        $table_cliente->whastapp = $dados['whastapp'];
-        $table_cliente->cpf = $dados['cpf'];
-        $table_cliente->email = '';
-        $table_cliente->instagram = '';
-
-        if($table_cliente->save()) {
-            return $id_cliente = $table_cliente->id;
+        if($this->cliente->save()) {
+            return $id_cliente = $this->cliente->id;
         } else {
             return redirect()->route('agendamento')->with('error', 'Processo não autorizado.');
         }
-
     }
 
     public function registeragenda($dados)
     {
-
-        $table_agendamento = resolve(Agendamento::class);
         $id_cliente = $this->registercliantes($dados);
-
+        
         $agenda = $this->buscarCliente($dados['cpf']);
-        $table_agendamento->status = $agenda ? 'return_date' : 0;
-        $table_agendamento->data = $dados['date'];
-        $table_agendamento->opening_hours = $dados['opening_hours'];
-        $table_agendamento->procedimento_key = implode(',', $dados['procedimento_key']);
-        $table_agendamento->cliente_id = $id_cliente;
-        $table_agendamento->procedimento_id = 1;
-        $table_agendamento->final_time = null;
-        $table_agendamento->return_date = null;
-        $table_agendamento->whastapp = '';
-        $table_agendamento->payment = '';
 
-        $table_agendamento->save();
+        $this->agendamento->status = $agenda ? 'return_date' : 0;
+        $this->agendamento->data = $dados['date'];
+        $this->agendamento->opening_hours = $dados['opening_hours'];
+        $this->agendamento->procedimento_key = implode(',', $dados['procedimento_key']);
+        $this->agendamento->cliente_id = $id_cliente;
+        $this->agendamento->procedimento_id = 1;
+        $this->agendamento->final_time = null;
+        $this->agendamento->return_date = null;
+        $this->agendamento->whastapp = '';
+        $this->agendamento->payment = '';        
+        $this->agendamento->save();
     }
 
     public function cancel($id)
     {
-        $agendamento = Agendamento::find($id);
+        $agendamento = $this->agendamento->find($id);       
         $agendamento->status = 'cancel_atend';
         $agendamento->save();
     }
@@ -152,7 +151,7 @@ class AtendimentoController extends Controller
     public function delete($id)
     {
         if ($id) {
-            Agendamento::find($id)->delete();
+            $this->agendamento->find($id)->delete();
         }
     }
 
