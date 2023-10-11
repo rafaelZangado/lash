@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AgendamentoRequest;
 use App\Models\Agendamento;
 use App\Models\Cliente;
 use App\Models\Procedimento;
@@ -53,18 +54,11 @@ class AgendamentoController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(AgendamentoRequest $request)
     {
-        $dados = $request->validate([
-            'date' => 'required|date',
-            'opening_hours' => 'required',
-            'cpf' => 'required',
-            'nome' => 'required',
-            'whatsapp' => 'required|numeric',
-            'processo' => 'required|array',
-        ]);
-
-        $this->registeragenda($dados );
+        $dados = $request->validate();
+       
+        $this->registeragenda($dados);
 
         return redirect()->route('agendamento')->with('success', 'Agendamento atualizado com sucesso.');
     }
