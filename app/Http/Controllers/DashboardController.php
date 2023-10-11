@@ -8,12 +8,25 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
+ 
+    protected $agendamento;
 
-    public function eventos()
+    public function __construct(Agendamento $agendamento)
     {
+        $this->agendamento = $agendamento;
+    }
 
-        $agendamentos = Agendamento::with('cliente', 'procedimento')->get();
-
+     /**
+     * Função para retornar todos os agendamentos
+     * Function to return all appointments
+     * 
+     * @param Model Agendamento
+     * @return Json 
+     */
+    public function eventos() 
+    {
+        
+        $agendamentos = $this->agendamento->with('cliente', 'procedimento')->get();
         $eventos = [];
         $procedimentos = [];
         foreach ($agendamentos as $agendamento) {
@@ -53,13 +66,17 @@ class DashboardController extends Controller
     }
 
 
-
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function teste()
     {
-
         $procedimentosall = Procedimento::all();
         return response()->json($procedimentosall);
-
     }
 
     public function checkin($id){

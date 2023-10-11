@@ -116,7 +116,7 @@
             </div>
         </div>
     </div>
-    <div class="card">
+    {{-- <div class="card">
         <div class="card-body">
             <center>
             <p class="card-title">
@@ -166,7 +166,7 @@
                 </ul>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!--CRIAR AGENDAMENTO-->
     <div class="modal fade col-lg-12" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
