@@ -7,16 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 class AtendimentoRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -24,7 +14,13 @@ class AtendimentoRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'date' => ['required','date'],
+            'opening_hours' => 'required',
+            'cpf' => 'nullable',
+            'nome' => 'required',
+            'whastapp' => 'required',
+            'procedimento_key' => ['required','array'],
+            'comment' => 'nullable'
         ];
     }
 }
