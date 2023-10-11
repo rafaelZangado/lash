@@ -20,8 +20,7 @@ class AtendimentoController extends Controller
     public function __construct(
         Agendamento $agendamento,
         Cliente $cliente,
-    )
-    {
+    ) {
         $this->agendamento = $agendamento;
         $this->cliente = $cliente;
     }
@@ -42,15 +41,16 @@ class AtendimentoController extends Controller
         }
         $pro = $procedimentos->pluck('nome', 'id')->all();
 
-        return view('/fullcalendar',
-        [
-            'procedimentos' =>  $procedimentos,
-            'clientes' => $clientes,
-            'agendamentos' => $agendamentos,
-            'procedimentosPorId' => $procedimentosPorId,
-            'pro' => $pro,
-        ]);
-
+        return view(
+            '/fullcalendar',
+            [
+                'procedimentos' =>  $procedimentos,
+                'clientes' => $clientes,
+                'agendamentos' => $agendamentos,
+                'procedimentosPorId' => $procedimentosPorId,
+                'pro' => $pro,
+            ]
+        );
     }
 
     public function start($id)
@@ -74,7 +74,6 @@ class AtendimentoController extends Controller
         $agendamento->return_date = $dataFinal->toDateString();
 
         $agendamento->save();
-
     }
 
     public function up(Request $request)
@@ -87,13 +86,13 @@ class AtendimentoController extends Controller
         $procedimentosSelecionados = $request->input('procedimento_key');
         $procedimentosIds = implode(',', $procedimentosSelecionados);
         $agendamento->procedimento_key = $procedimentosIds;
+        $agendamento->comment = $request->input('comment') ? $request->input('comment') : '';
         $agendamento->save();
-
     }
 
     public function store(AtendimentoRequest $request)
     {
-        $dados = $request->validated();       
+        $dados = $request->validated();
         if (!isset($dados['cpf'])) {
             $dados['cpf'] = '';
         } else {
@@ -101,7 +100,7 @@ class AtendimentoController extends Controller
         }
         $dados['whastapp'] = Str::replace(['(', ')', '-'], '', $dados['whastapp']);
 
-        $this->registeragenda($dados );
+        $this->registeragenda($dados);
         return redirect()->back()->with('success', 'Informações registradas com sucesso!');
 
         //return redirect()->route('atendimento')->with('success', 'Agendamento atualizado com sucesso.');
@@ -115,7 +114,7 @@ class AtendimentoController extends Controller
         $this->cliente->email = '';
         $this->cliente->instagram = '';
 
-        if($this->cliente->save()) {
+        if ($this->cliente->save()) {
             return $id_cliente = $this->cliente->id;
         } else {
             return redirect()->route('agendamento')->with('error', 'Processo não autorizado.');
@@ -125,7 +124,7 @@ class AtendimentoController extends Controller
     public function registeragenda($dados)
     {
         $id_cliente = $this->registercliantes($dados);
-        
+
         $agenda = $this->buscarCliente($dados['cpf']);
 
         $this->agendamento->status = $agenda ? 'return_date' : 0;
@@ -135,15 +134,16 @@ class AtendimentoController extends Controller
         $this->agendamento->cliente_id = $id_cliente;
         $this->agendamento->procedimento_id = 1;
         $this->agendamento->final_time = null;
-        $this->agendamento->return_date = null;
+        $this->agendamento->return_date = null;       
+        $this->agendamento->comment = '';       
         $this->agendamento->whastapp = '';
-        $this->agendamento->payment = '';        
+        $this->agendamento->payment = '';
         $this->agendamento->save();
     }
 
     public function cancel($id)
     {
-        $agendamento = $this->agendamento->find($id);       
+        $agendamento = $this->agendamento->find($id);
         $agendamento->status = 'cancel_atend';
         $agendamento->save();
     }
@@ -161,7 +161,7 @@ class AtendimentoController extends Controller
         $agenda = Agendamento::whereHas('cliente', function ($query) use ($cpf) {
             $query->where('cpf', $cpf);
         })->latest()
-        ->first();
+            ->first();
 
         if (!$agenda || !$cpf) {
             //return response()->json(['message' => 'Nenhum agendamento encontrado para este CPF'], null);
@@ -175,6 +175,5 @@ class AtendimentoController extends Controller
             'procedimentos' => explode(',', $agenda->procedimento_key),
             'data' => $agenda->data
         ];
-
     }
 }
