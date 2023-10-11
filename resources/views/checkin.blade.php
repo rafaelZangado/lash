@@ -59,17 +59,16 @@
                             Parceria / Modelo / Treinamento
                         </option>
                     </select>
-                </div>
+                </div>                
             </div>
             <br>
             <div class="row">
                 <div class="col">
                     <div class="mb-4">
-                        <h3  class="form-label">Comentario</h3>
-                        <label style="color: rgb(255, 2, 2)">⚠️ Ops, no momento esse campo ainda não esta disponivel</label>
-                        <textarea class="form-control"
+                        <h3  class="form-label">Comentario</h3>                      
+                        <textarea class="form-control" id='comment'
                         placeholder="Você pode registrar algum comentário aqui após a conclusão do atendimento."
-                        rows="3" disabled></textarea>
+                        rows="3" ></textarea>
                     </div>
                 </div>
             </div>
@@ -169,6 +168,7 @@
                 var clienteId = {{ $checkin->cliente->id }};
                 var checkboxes = document.querySelectorAll('#procedimento_key:checked');
                 var payment = document.getElementById('payment').value;
+                var comment = document.getElementById('comment').value;
 
                 a = checkboxes.forEach(function(checkbox) {
                     procedimento_key.push(checkbox.value);
@@ -178,7 +178,8 @@
                     _token: csrfToken,
                     id: clienteId,
                     procedimento_key: procedimento_key,
-                    payment: payment
+                    payment: payment,
+                    comment: comment
                 };
 
                 $.ajax({
